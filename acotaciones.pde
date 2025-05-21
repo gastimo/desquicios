@@ -11,9 +11,13 @@ int LIBRETO_ALTO  = 720;
 // Carpetas
 String CARPETA_ICONOS   = "iconos";
 String CARPETA_GUIONES  = "guiones";
+String CARPETA_JAVA     = "java";
+
+String DIRECTOR_CLASE   = "Director";
+String DIRECTOR_METODO  = "funcion";
 
 // Definiciones de libreto
-String LIBRETO_TITULO = "Libreto";
+String LIBRETO_TITULO = "LIBRETO: ";
 color  LIBRETO_COLOR_FONDO = #6ba0cc;
 
 // Arhivos de imágenes

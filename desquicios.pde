@@ -29,12 +29,23 @@ void settings() {
 }
 
 void setup() {
+  
+  // DESGARGAR EL GUION (SKETCH) A DESQUICIAR
   // Se accede a la página del sitio oficial de Processin
   // para obtener un guion de ejemplo (el "sketch").
   // El guion descargado se almacena localmente.
+  // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
   Pagina pagina = new Pagina(URL_EJEMPLO_01);
   pagina.guardarGuionOriginal();
   
+  
+  // ABRIR EL LIBRETO CON EL GUION DESQUICIADO
+  // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
   libreto.definirTitulo(pagina.obtenerTitulo());
   libreto.abrir();
+  
+  // INICIAR LA FUNCION
+  // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+  Funcion funcion = new Funcion();
+  funcion.agotar();
 }

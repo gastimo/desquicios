@@ -16,7 +16,6 @@ class Libreto {
   
   void abrir() {
     background(LIBRETO_COLOR_FONDO);
-    //windowTitle(LIBRETO_TITULO);
     PImage logoProcessing = loadImage(CARPETA_ICONOS + "/" + LOGO_PROCESSING);
     image(logoProcessing, 16, 12, 18, 18);
     fill(255);
@@ -25,6 +24,6 @@ class Libreto {
   }
   
   void definirTitulo(String titulo) {
-    windowTitle(titulo);
+    windowTitle(LIBRETO_TITULO + titulo);
   }
 }
