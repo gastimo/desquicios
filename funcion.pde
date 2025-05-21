@@ -1,7 +1,7 @@
 // 
 // FUNCION
 // Es la representación del guion original de Processing (el "sketch")
-// luego de haber sido intervenido (o desquiciado).
+// pero luego de haber sido intervenido (o desquiciado).
 // Para producir esta función interviene una clase llamada "Director"
 // que es generada dinámicamente a partir del guion recibido y realiza
 // los "desquicios" sobre el sketch original de Processing.
@@ -56,7 +56,8 @@ class Funcion {
     }
     
     void agotar() {
-      accion.draw();
+      String[] args = {"--location=100, 100", "Desquicio"};
+      PApplet.runSketch(args, accion);
     }
 }
       

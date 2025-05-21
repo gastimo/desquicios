@@ -36,12 +36,13 @@ void setup() {
   // El guion descargado se almacena localmente.
   // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
   Pagina pagina = new Pagina(URL_EJEMPLO_01);
-  pagina.guardarGuionOriginal();
+  pagina.guardarEsquicio();
   
   
   // ABRIR EL LIBRETO CON EL GUION DESQUICIADO
   // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
   libreto.definirTitulo(pagina.obtenerTitulo());
+  libreto.desquiciar(pagina.obtenerEsquicio());
   libreto.abrir();
   
   // INICIAR LA FUNCION
