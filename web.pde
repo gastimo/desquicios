@@ -15,9 +15,20 @@ String URL_EJEMPLOS   = "https://processing.org/examples";
 String URL_EJEMPLO_01 = "https://processing.org/examples/array.html";
 String URL_EJEMPLO_02 = "https://processing.org/examples/array2d.html";
 String URL_EJEMPLO_03 = "https://processing.org/examples/arrayobjects.html";
+String URL_EJEMPLO_04 = "https://processing.org/examples/moveeye.html";
+String URL_EJEMPLO_05 = "https://processing.org/examples/orthographic.html";
+String URL_EJEMPLO_06 = "https://processing.org/examples/perspective.html";
+String URL_EJEMPLO_07 = "https://processing.org/examples/brightness.html";
+String URL_EJEMPLO_08 = "https://processing.org/examples/colorvariables.html";
+String URL_EJEMPLO_09 = "https://processing.org/examples/hue.html";
+String URL_EJEMPLO_10 = "https://processing.org/examples/lineargradient.html";
+
+
+
+
 
 // Etiquetas HTML que encierran el código del sketch (el esquicio)
-String ETIQUETA_APERTURA = "<code>";
+String ETIQUETA_APERTURA = "<code";
 String ETIQUETA_CIERRE   = "</code>";
 
 String ETIQUETA_APERTURA_TITULO = "<title";
@@ -58,15 +69,26 @@ class Pagina {
     return esquicio;
   }
   
+  void guardar() {
+    saveStrings(CARPETA_WEB + "/" + nombreArchivo, contenido);
+  }
+  
   void guardarEsquicio() {
      saveStrings(CARPETA_ESQUICIOS + "/" + nombreArchivo, esquicio);
   }
-  
+
   private String[] obtenerGuion() {
     boolean codigoEncontrado = false;
+    boolean metodoDrawEncontrado = false;
+    boolean metodoSetupEncontrado = false;
     String textoBusqueda = ETIQUETA_APERTURA;
     ArrayList<String> lineasCodigo = new ArrayList<String>();
 
+
+    // PRIMERA PASADA
+    // Se recorren todas las lineas del contenido de la pagina
+    // para extraer el titulo y los contenidos del esquicio
+    // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     for (int i = 0; i < contenido.length; i++) {
       
       // Se recupera el título de la página del código HTML 
@@ -75,25 +97,56 @@ class Pagina {
         tituloEsquicio = lineaDeTitulo.substring(lineaDeTitulo.indexOf(">")+1, lineaDeTitulo.indexOf(ETIQUETA_CIERRE_TITULO)).trim();
       }
       
+      
       // Se procesan las líneas para quedarse sólo con aquellas
       // que se encuentren dentro de las etiquetas <code></code>
-      int indice = contenido[i].indexOf(textoBusqueda);
+      String linea = contenido[i];
+      int indice = linea.indexOf(textoBusqueda);
       if (!codigoEncontrado && indice >= 0) {
         codigoEncontrado = true;
+        indice = linea.indexOf(">", indice + textoBusqueda.length())+1;
+        linea = linea.substring(indice);
+        lineasCodigo.add(linea);
         textoBusqueda = ETIQUETA_CIERRE;
-        indice += ETIQUETA_APERTURA.length();
+        continue;
       }
       else if (codigoEncontrado && indice >= 0) {
         codigoEncontrado = false;
-        textoBusqueda = ETIQUETA_APERTURA;    
+        lineasCodigo.add(linea.substring(0, indice));
+        linea = linea.substring(indice + textoBusqueda.length());
+        textoBusqueda = ETIQUETA_APERTURA; 
+        indice = linea.indexOf(textoBusqueda);
+        if (indice >= 0) {
+          codigoEncontrado = true;
+          indice = linea.indexOf(">", indice + textoBusqueda.length())+1;
+          linea = linea.substring(indice);
+          lineasCodigo.add(linea);
+          textoBusqueda = ETIQUETA_CIERRE;
+          continue;
+        }
       }
       if (codigoEncontrado) {
-        lineasCodigo.add(contenido[i].substring(indice >= 0 ? indice : 0));
+        linea = linea.substring(indice >= 0 ? indice : 0);
+        if (!metodoSetupEncontrado && linea.indexOf("void setup() {") >= 0) {
+          metodoSetupEncontrado = true;
+        }
+        if (!metodoDrawEncontrado && linea.indexOf("void draw() {") >= 0) {
+          metodoDrawEncontrado = true;
+        }
+        lineasCodigo.add(linea);
       }
+    }
+    
+    // SEGUNDA PASADA
+    // Si el esquicio no tiene ninguna funcion "setup" ni "draw", entonces
+    // se agrega el metodo "setup" encapsulando a todo el codigo.
+    if (!metodoSetupEncontrado && !metodoDrawEncontrado) {
+      lineasCodigo.add(0, "void setup() {");
+      lineasCodigo.add("}");
     }
     
     String[] arrayDeLineas = new String[lineasCodigo.size()];
     return lineasCodigo.toArray(arrayDeLineas);
   }
-  
+
 }

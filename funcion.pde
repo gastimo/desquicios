@@ -17,27 +17,25 @@ import java.lang.reflect.Method;
 
 class Funcion {
 
-    Object director;
+    Object  directorFuncion;
     PApplet accion;
  
-    public Funcion() {
+    public Funcion(String director) {
       try {
         JavaCompiler jc = ToolProvider.getSystemJavaCompiler();
         if (jc != null) {
           
           // LA CLASE DE DIRECTOR
           // El "Director" es una clase generada automáticamente, responsable de dirigir,
-          // o mejor dicho, agotar la función a partir del guion original recibido.
-          // Los desquicios sobre el sketch original ya se realizaron previamente y fueron 
-          // guardados en la memoria del Director en la forma de una clase en Java.
+          // o mejor dicho, "desquiciar" la función a partir del guion original recibido.
           // Como la obra depende del guion recibido, esta clase es generada de manera
           // dinámica y recién en este punto es cargada en memoria para empezar la función.
           // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-          Path sourcePath = Paths.get(sketchPath() + "/" + CARPETA_JAVA, DIRECTOR_CLASE + ".java");
+          Path sourcePath = Paths.get(sketchPath() + "/" + CARPETA_JAVA, director + ".java");
           jc.run(null, null, null, sourcePath.toFile().getAbsolutePath());
           URL classUrl = sourcePath.getParent().toFile().toURI().toURL();
           URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{classUrl});
-          Class<?> claseDirector = Class.forName(DIRECTOR_CLASE, true, classLoader);
+          Class<?> claseDirector = Class.forName(director, true, classLoader);
           
           
           
@@ -45,9 +43,9 @@ class Funcion {
           // La función intervenida por el director es instanciada en este punto
           // para ser utilizada al momento de comenzar la representación.
           // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-          director = claseDirector.newInstance();
+          directorFuncion = claseDirector.getDeclaredConstructor().newInstance();
           Method elMetodo = claseDirector.getMethod(DIRECTOR_METODO);
-          accion = (PApplet) elMetodo.invoke(director);
+          accion = (PApplet) elMetodo.invoke(directorFuncion);
         }
       }
       catch (Exception e) {

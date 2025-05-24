@@ -1,5 +1,5 @@
 // 
-// DESQUICIOS
+// FUNCIONES AGOTADAS
 //
 // El "sketch" —esquicio, en castellano— es el código escrito
 // en Processing para producir una obra. Es su guion. 
@@ -35,7 +35,8 @@ void setup() {
   // para obtener un guion de ejemplo (el "sketch").
   // El guion descargado se almacena localmente.
   // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-  Pagina pagina = new Pagina(URL_EJEMPLO_01);
+  Pagina pagina = new Pagina(URL_EJEMPLO_10);
+  pagina.guardar();
   pagina.guardarEsquicio();
   
   
@@ -45,8 +46,9 @@ void setup() {
   libreto.desquiciar(pagina.obtenerEsquicio());
   libreto.abrir();
   
+  
   // INICIAR LA FUNCION
   // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-  Funcion funcion = new Funcion();
+  Funcion funcion = new Funcion(libreto.nombreDirector());
   funcion.agotar();
 }
