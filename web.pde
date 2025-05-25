@@ -1,152 +1,92 @@
 // 
-// WEB
-// Clases que permiten leer de manera online páginas web del 
-// sitio oficial de Processing y manipular sus contenidos,
-// principalmente con el propósito de extraer los esquicios 
-// (sketches) que se utilizan como ejemplos en el sitio.
-// vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+// WEB - ACCESO Y CACHE DE PAGINAS
+// Para evitar multiples accesos a la misma pagina web, este cache
+// mantiene copias de las ultimas paginas accedidas.
+// - Se mantiene una copia del HTML en memoria (en un HashMap)
+// - Se mantiene una copia del HTML en un archivo en el disco
+// Cuando el libreto solicita acceder a una nueva pagina, el cache
+// intenta primero recuperarla de la memoria. Si ahi no la encuentra
+// intenta en segundo lugar recuperarla del disco. Y si ahi tampoco,
+// esta, recien entonces hace la peticion HTTP para leer la pagina web.
+// vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
 import java.net.URL;
 import java.net.MalformedURLException;
 
 
-// Direcciones de las páginas de ejemplos del sitio oficial de Processing
-String URL_EJEMPLOS   = "https://processing.org/examples";
-String URL_EJEMPLO_01 = "https://processing.org/examples/array.html";
-String URL_EJEMPLO_02 = "https://processing.org/examples/array2d.html";
-String URL_EJEMPLO_03 = "https://processing.org/examples/arrayobjects.html";
-String URL_EJEMPLO_04 = "https://processing.org/examples/moveeye.html";
-String URL_EJEMPLO_05 = "https://processing.org/examples/orthographic.html";
-String URL_EJEMPLO_06 = "https://processing.org/examples/perspective.html";
-String URL_EJEMPLO_07 = "https://processing.org/examples/brightness.html";
-String URL_EJEMPLO_08 = "https://processing.org/examples/colorvariables.html";
-String URL_EJEMPLO_09 = "https://processing.org/examples/hue.html";
-String URL_EJEMPLO_10 = "https://processing.org/examples/lineargradient.html";
+class Web {
+  
+  HashMap<String, String[]> cache = new HashMap<String, String[]>();  
 
 
-
-
-
-// Etiquetas HTML que encierran el código del sketch (el esquicio)
-String ETIQUETA_APERTURA = "<code";
-String ETIQUETA_CIERRE   = "</code>";
-
-String ETIQUETA_APERTURA_TITULO = "<title";
-String ETIQUETA_CIERRE_TITULO   = "</title>";
-
-
-
-/**
- * Pagina
- * Objeto que descarga el contenido HTML de una página a partir 
- * de una URL y permite manipular su contenido para extraer el
- * texto del esquicio, o sea, el "sketch" de Processing.
- */
- 
-class Pagina {
-  String[] contenido;
-  String[] esquicio;
-  String tituloEsquicio;
-  String nombreArchivo;
-
-  Pagina(String url) {
-    try {
-      URL urlPagina = new URL(url);
-      nombreArchivo = urlPagina.getFile();
-      contenido = loadStrings(url);
-      esquicio = obtenerGuion();
+  /**
+   * obtener
+   * Funcion principal para gestionar el cache de acceso a 
+   * las paginas
+   */
+  String[] obtener(String url) {
+    
+    String nombreArchivo = "";
+    
+    
+    // 1. CACHE EN MEMORIA
+    // Primero, se intenta recuperar la pagina del cache en memoria.
+    // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+    String[] contenido = cache.get(url);
+    informar(url, contenido, "CACHE");
+    
+    
+    // 2. ALMACENAMIENTO LOCAL
+    // Si no estaba en memoria, se busca en la carpeta con los archivos.
+    // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+    if (contenido == null) {
+      nombreArchivo = obtenerNombreArchivo(url);
+      if (nombreArchivo != null) {
+        contenido = loadStrings(CARPETA_WEB + "/" + nombreArchivo);
+        cache.put(url, contenido);
+        informar(nombreArchivo, contenido, "DISCO LOCAL");
+      }
     }
-    catch (MalformedURLException e) {
-      println("No se pudo leer el contenido de la página " + url);
-    }
-  }
-  
-  String obtenerTitulo() {
-    return tituloEsquicio;
-  }
-  
-  String[] obtenerEsquicio() {
-    return esquicio;
-  }
-  
-  void guardar() {
-    saveStrings(CARPETA_WEB + "/" + nombreArchivo, contenido);
-  }
-  
-  void guardarEsquicio() {
-     saveStrings(CARPETA_ESQUICIOS + "/" + nombreArchivo, esquicio);
-  }
 
-  private String[] obtenerGuion() {
-    boolean codigoEncontrado = false;
-    boolean metodoDrawEncontrado = false;
-    boolean metodoSetupEncontrado = false;
-    String textoBusqueda = ETIQUETA_APERTURA;
-    ArrayList<String> lineasCodigo = new ArrayList<String>();
-
-
-    // PRIMERA PASADA
-    // Se recorren todas las lineas del contenido de la pagina
-    // para extraer el titulo y los contenidos del esquicio
-    // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-    for (int i = 0; i < contenido.length; i++) {
-      
-      // Se recupera el título de la página del código HTML 
-      if (tituloEsquicio == null && contenido[i].indexOf(ETIQUETA_APERTURA_TITULO) >= 0) {
-        String lineaDeTitulo = contenido[i].substring(contenido[i].indexOf(ETIQUETA_APERTURA_TITULO) + ETIQUETA_APERTURA_TITULO.length());
-        tituloEsquicio = lineaDeTitulo.substring(lineaDeTitulo.indexOf(">")+1, lineaDeTitulo.indexOf(ETIQUETA_CIERRE_TITULO)).trim();
+    
+    // 3. ACCESO WEB
+    // Finalmente, si no se encontro se accede a la web via su URL
+    // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+    if (contenido == null) {
+      try {
+        contenido = loadStrings(url);
+        cache.put(url, contenido);
+        saveStrings(CARPETA_WEB + "/" + nombreArchivo, contenido);
+        informar(url, contenido, "WEB");
       }
-      
-      
-      // Se procesan las líneas para quedarse sólo con aquellas
-      // que se encuentren dentro de las etiquetas <code></code>
-      String linea = contenido[i];
-      int indice = linea.indexOf(textoBusqueda);
-      if (!codigoEncontrado && indice >= 0) {
-        codigoEncontrado = true;
-        indice = linea.indexOf(">", indice + textoBusqueda.length())+1;
-        linea = linea.substring(indice);
-        lineasCodigo.add(linea);
-        textoBusqueda = ETIQUETA_CIERRE;
-        continue;
-      }
-      else if (codigoEncontrado && indice >= 0) {
-        codigoEncontrado = false;
-        lineasCodigo.add(linea.substring(0, indice));
-        linea = linea.substring(indice + textoBusqueda.length());
-        textoBusqueda = ETIQUETA_APERTURA; 
-        indice = linea.indexOf(textoBusqueda);
-        if (indice >= 0) {
-          codigoEncontrado = true;
-          indice = linea.indexOf(">", indice + textoBusqueda.length())+1;
-          linea = linea.substring(indice);
-          lineasCodigo.add(linea);
-          textoBusqueda = ETIQUETA_CIERRE;
-          continue;
-        }
-      }
-      if (codigoEncontrado) {
-        linea = linea.substring(indice >= 0 ? indice : 0);
-        if (!metodoSetupEncontrado && linea.indexOf("void setup() {") >= 0) {
-          metodoSetupEncontrado = true;
-        }
-        if (!metodoDrawEncontrado && linea.indexOf("void draw() {") >= 0) {
-          metodoDrawEncontrado = true;
-        }
-        lineasCodigo.add(linea);
+      catch (Exception e) {
+        println("No se pudo leer el contenido de la página " + url);
       }
     }
     
-    // SEGUNDA PASADA
-    // Si el esquicio no tiene ninguna funcion "setup" ni "draw", entonces
-    // se agrega el metodo "setup" encapsulando a todo el codigo.
-    if (!metodoSetupEncontrado && !metodoDrawEncontrado) {
-      lineasCodigo.add(0, "void setup() {");
-      lineasCodigo.add("}");
-    }
-    
-    String[] arrayDeLineas = new String[lineasCodigo.size()];
-    return lineasCodigo.toArray(arrayDeLineas);
+    return contenido;
   }
-
+  
+  private String obtenerNombreArchivo(String url) {
+    String nombre = null;
+    if (url == URL_PAGINA_EJEMPLOS) {
+      nombre = "examples.html";
+    }
+    else {
+      try {
+        URL urlPagina = new URL(url);
+        nombre = urlPagina.getFile();
+      }
+      catch (MalformedURLException e) {
+        println("El link a la pagina es invalido: " + url);
+      }
+    }
+    return nombre;
+  }
+  
+  private void informar(String nombre, String[] contenido, String fuente) {
+    if (contenido != null) {
+      println(" --> Se recupero el contenido de " + nombre + " - Metodo de acceso: " + fuente);
+    }
+  }
 }

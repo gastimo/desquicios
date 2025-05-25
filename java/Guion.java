@@ -17,10 +17,11 @@ public class Guion {
         
         // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         // 
-        // DESQUICIO DE MÉTODOS
-        // Reeplazo de los métodos estándares de la clase
-        // PApplet por sus versiones "desquiciadas".
-        // 
+        // REDEFINICIÓN DE FUNCIONES "FINALES" (CONSTANTES)
+        // Como las funciones estándares de la clase PApplet 
+        // que están marcadas como "final" no pueden ser 
+        // sobreescritas, se las redefine bajo otro nombre.
+        //
         // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
         public final float desquicioRandom(double high) {
             return super.random((float)high);
@@ -38,12 +39,13 @@ public class Guion {
             return PApplet.tan((float)angle);
         }
         
+        
         // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         // 
-        // REDEFINICIÓN DE MÉTODOS CON PARÁMETROS "FLOAT"
-        // Redefición de los métodos estándares de la clase
+        // REDEFINICIÓN DE FUNCIONES CON PARÁMETROS "FLOAT"
+        // Redefinición de las funciones estándares de la clase
         // PApplet para corregir temas de precición cuando 
-        // tiene argumentos de tipo "float".
+        // tienen argumentos que son de tipo "float".
         // 
         // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv   
         public void stroke(double rgb) {

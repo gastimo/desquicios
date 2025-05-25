@@ -21,34 +21,40 @@
 // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
 
+Web web;
+Interfaz interfaz;
 Libreto libreto;
 
 
 void settings() {
-  libreto = new Libreto();
+  web = new Web();
+  interfaz = new Interfaz(web);
 }
 
 void setup() {
   
-  // DESGARGAR EL GUION (SKETCH) A DESQUICIAR
-  // Se accede a la página del sitio oficial de Processin
-  // para obtener un guion de ejemplo (el "sketch").
-  // El guion descargado se almacena localmente.
-  // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-  Pagina pagina = new Pagina(URL_EJEMPLO_10);
-  pagina.guardar();
-  pagina.guardarEsquicio();
+  // LA PARODIA DEL IDE (EL "META-PROCESSING")
+  // Lo primero que se hace es abrir la ventana de la pseudo-
+  // interfaz de Processing desde donde se pueden consultar
+  // y desplegar los "sketches" (esquicios) de los ejemplos
+  // disponibles en el sitio oficial.
+  // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv  
+  interfaz.inicializar(INTERFAZ_TITULO);
   
+ 
   
   // ABRIR EL LIBRETO CON EL GUION DESQUICIADO
   // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-  libreto.definirTitulo(pagina.obtenerTitulo());
-  libreto.desquiciar(pagina.obtenerEsquicio());
-  libreto.abrir();
+  //libreto.definirTitulo(pagina.obtenerTitulo());
+  //libreto.desquiciar(pagina.obtenerEsquicio());
   
   
   // INICIAR LA FUNCION
   // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-  Funcion funcion = new Funcion(libreto.nombreDirector());
-  funcion.agotar();
+  //Funcion funcion = new Funcion(libreto.nombreDirector());
+  //funcion.agotar();
+}
+
+void draw() {
+  interfaz.dibujar();
 }

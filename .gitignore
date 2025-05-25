@@ -2,4 +2,4 @@ guiones/
 esquicios/
 web/
 java/*.class
-java/Director.*
+java/Director*

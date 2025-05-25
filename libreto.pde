@@ -16,26 +16,6 @@ class Libreto {
   String claseDirector = DIRECTOR_CLASE;
 
 
-  Libreto() {
-    size(LIBRETO_ANCHO, LIBRETO_ALTO);
-  }
-  
-  /**
-   * abrir
-   * Ademas de contener el guion, el libreto es la parodia
-   * del IDE de Processing. Esta funcion abre una nueva 
-   * ventana emulando al IDE original, pero conteniendo
-   * el guion intervenido.
-   */
-  void abrir() {
-    background(LIBRETO_COLOR_FONDO);
-    PImage logoProcessing = loadImage(CARPETA_ICONOS + "/" + LOGO_PROCESSING);
-    image(logoProcessing, 16, 12, 18, 18);
-    fill(255);
-    noStroke();
-    rect(16, 50, width-32, height-100);
-  }
-  
   
   /**
    * definirTitulo
