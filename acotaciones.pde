@@ -23,6 +23,7 @@ String DIRECTOR_FUNCION_CLASE    = "Director";
 String DIRECTOR_DESQUICIO_CLASE  = "Director";
 String DIRECTOR_METODO_DIRECCION = "funcion";
 String DIRECTOR_METODO_FINALIZAR = "terminar";
+String DIRECTOR_METODO_VERIFICAR = "concluida";
 
 
 // Arhivos de imágenes 
@@ -105,7 +106,7 @@ String INTERFAZ_TEXTO_PANEL_DER    = "Acotaciones del Desquicio";
 String INTERFAZ_TEXTO_PANEL_CENTRO = "Esquicio de la Escena (Sketch Original)";
 String INTERFAZ_TEXTO_ETIQUETA     = "[[[NOMBRE_EJEMPLO]]]";
 String INTERFAZ_TEXTO_CONSOLA_01   = "> FUNCIONES AGOTADAS!!!";
-String INTERFAZ_TEXTO_CONSOLA_02   = "> Guion original: \"" + INTERFAZ_TEXTO_ETIQUETA + "\" - Desquicio en progreso...";
+String INTERFAZ_TEXTO_CONSOLA_02   = "> Escena: \"" + INTERFAZ_TEXTO_ETIQUETA + "\" > Presione \"I\" para iniciar la funcion o \"C\" para concluirla";
 String INTERFAZ_TEXTO_MENU         = "File      Edit      Sketch      Debug      Tools      Help";
 String[] INTERFAZ_TEXTO_CONSOLA    = new String[]{INTERFAZ_TEXTO_CONSOLA_01, INTERFAZ_TEXTO_CONSOLA_02};
 

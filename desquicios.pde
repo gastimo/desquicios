@@ -48,3 +48,12 @@ void draw() {
 void mouseClicked() {
   interfaz.dirigir();
 }
+
+void keyPressed() {
+  if (key == 'i' || key == 'I') {
+    interfaz.iniciar();
+  }
+  else if (key == 'c' || key == 'C') {
+    interfaz.concluir();
+  }
+}

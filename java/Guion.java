@@ -20,18 +20,43 @@ public class Guion {
         }
     }
     
+    public boolean concluida() {
+        if (funcionEnCurso != null) {
+            return funcionEnCurso.concluida;
+        }
+        else {
+            return false;
+        }
+    }
+    
     class Funcion extends PApplet {
+        
+        boolean concluida = false;
         
         Funcion() {
         }
 
         [[[INSERTAR ESQUICIO ACA]]]
-    
+        
         
         void cerrar() {
-            System.out.println("El director da por concluida la funcion original");
-            Frame frame = ( (SmoothCanvas) ((PSurfaceAWT)surface).getNative()).getFrame();
-            frame.dispose();
+            if (!this.concluida) {
+                System.out.println("El director da por concluida la funcion original");
+                try {
+                    Frame frame = ( (SmoothCanvas) ((PSurfaceAWT)surface).getNative()).getFrame();
+                    frame.dispose();
+                    this.concluida = true;
+                }
+                catch (Exception e) {
+                    System.out.println(" - No fue posible concluir la funcion");
+                }
+            }
+        }
+        
+        public void keyPressed() {
+            if (key == 'c' || key == 'C') {
+                cerrar();
+            }
         }
         
         // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -175,6 +175,7 @@ class Pagina {
     if (!metodoSetupEncontrado && !metodoDrawEncontrado) {
       lineasCodigo.add(0, "void setup() {");
       lineasCodigo.add("}");
+      lineasCodigo.add("void draw() {}");
     }
     
     String[] arrayDeLineas = new String[lineasCodigo.size()];

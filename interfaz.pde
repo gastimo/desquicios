@@ -115,6 +115,14 @@ class Interfaz {
         urlEscenaEjemplo = null;
     }
     
+    // Se verifica si la funcion no ha concluido ya
+    // (por ejemplo, porque el usuario cerró la ventana
+    if (funcionOriginal != null) {
+      if (funcionOriginal.concluida()) {
+        concluir();
+      }
+    }
+    
     // Se dibujan todos los paneles de la interfaz
     panelSuperior.dibujar();
     panelIzquierdo.dibujar();
@@ -253,14 +261,35 @@ class Interfaz {
    */
   void dirigir() {
     if (botonIniciar.enFoco() && !inicioDeFuncion) {
+      iniciar();
+    }
+    else if (botonDetener.enFoco() && inicioDeFuncion) {
+      concluir();
+    }
+  }
+ 
+ 
+  /**
+   * iniciar
+   * Da inicio a la funcion
+   */
+  void iniciar() {
+    if (!inicioDeFuncion) {
       inicioDeFuncion = true;
       botonIniciar.activar();
       botonDetener.inactivar();
       funcionOriginal = new Funcion(libreto.directorDesignadoParaEsquicio());
       funcionOriginal.iniciar();
-
     }
-    else if (botonDetener.enFoco() && inicioDeFuncion) {
+  }
+    
+  
+  /**
+   * concluir
+   * Da por concluida la funcion
+   */
+  void concluir() {
+    if (inicioDeFuncion) {
       inicioDeFuncion = false;
       botonDetener.activar();
       botonIniciar.inactivar();
@@ -271,7 +300,7 @@ class Interfaz {
       botonDetener.inactivar();
     }
   }
-  
+
 
 
 

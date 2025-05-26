@@ -21,6 +21,7 @@ class Funcion {
     Object  directorFuncion;
     PApplet accion;
     Class<?> claseDirector;
+    Method verificacionFin;
  
     public Funcion(String director) {
       try {
@@ -67,6 +68,20 @@ class Funcion {
       catch (Exception e) {
         println("No se pudo cerrar la función");
         e.printStackTrace();
+      }
+    }
+    
+    boolean concluida() {
+      try {
+        if (verificacionFin == null) {
+          verificacionFin = claseDirector.getMethod(DIRECTOR_METODO_VERIFICAR);
+        }
+        return (boolean) verificacionFin.invoke(directorFuncion);
+      }
+      catch (Exception e) {
+        println("No se pudo cerrar la función");
+        e.printStackTrace();
+        return false;
       }
     }
 }
