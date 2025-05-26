@@ -20,6 +20,7 @@ class Funcion {
 
     Object  directorFuncion;
     PApplet accion;
+    Class<?> claseDirector;
  
     public Funcion(String director) {
       try {
@@ -36,8 +37,7 @@ class Funcion {
           jc.run(null, null, null, sourcePath.toFile().getAbsolutePath());
           URL classUrl = sourcePath.getParent().toFile().toURI().toURL();
           URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{classUrl});
-          Class<?> claseDirector = Class.forName(director, true, classLoader);
-          
+          claseDirector = Class.forName(director, true, classLoader);
           
           
           // LA FUNCIÓN AGOTADA
@@ -45,7 +45,7 @@ class Funcion {
           // para ser utilizada al momento de comenzar la representación.
           // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
           directorFuncion = claseDirector.getDeclaredConstructor().newInstance();
-          Method elMetodo = claseDirector.getMethod(DIRECTOR_METODO);
+          Method elMetodo = claseDirector.getMethod(DIRECTOR_METODO_DIRECCION);
           accion = (PApplet) elMetodo.invoke(directorFuncion);
         }
       }
@@ -54,9 +54,20 @@ class Funcion {
       }
     }
     
-    void agotar() {
+    void iniciar() {
       String[] args = {"--location=100, 100", "Desquicio"};
       PApplet.runSketch(args, accion);
+    }
+    
+    void terminar() {
+      try {
+        Method metodoCierre = claseDirector.getMethod(DIRECTOR_METODO_FINALIZAR);
+        metodoCierre.invoke(directorFuncion);
+      }
+      catch (Exception e) {
+        println("No se pudo cerrar la función");
+        e.printStackTrace();
+      }
     }
 }
       

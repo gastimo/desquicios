@@ -11,7 +11,7 @@
 //
 // El libreto, luego, designa y crea una clase Java dinamica que 
 // asumira el rol de "Director" de la funcion y es la responsable de
-// de llevar a cabo la adaptacion del esquicio original.
+// de llevar a cabo la adaptacion del guion original (esquicio).
 //
 // La adpatacion consiste en reinterpretar el codigo del esquicio
 // y subvertir su guion (desquiciarlo), alterando el comportamiento
@@ -25,7 +25,8 @@ class Libreto {
   Pagina ejemplosOficiales;
   String[] guionOriginal;  // Esquicio de Processing
   String[] guion;
-  String claseDirector = DIRECTOR_CLASE;
+  String claseDirectorFuncion   = DIRECTOR_FUNCION_CLASE;
+  String claseDirectorDesquicio = DIRECTOR_DESQUICIO_CLASE;
 
 
   /**
@@ -60,13 +61,24 @@ class Libreto {
   
   
   /**
-   * nombreDirector
+   * directorDesignadoParaEsquicio
+   * Devuelve el nombre de la clase Java generada dinamicamente
+   * que se encargara de dirigir la funcion con el guion original.
+   */
+  String directorDesignadoParaEsquicio() {
+    return claseDirectorFuncion;
+  }
+  
+  
+  /**
+   * directorDesignadoParaDesquicio
    * Devuelve el nombre de la clase Java generada dinamicamente
    * que se encargara de dirigir la funcion desquiciada.
    */
-  String nombreDirector() {
-    return claseDirector;
+  String directorDesignadoParaDesquicio() {
+    return claseDirectorDesquicio;
   }
+  
   
   /**
    * guionOriginal
@@ -88,7 +100,7 @@ class Libreto {
    * guion de la nueva obra.
    */
   void desquiciar(String[] esquicio) {
-    claseDirector = DIRECTOR_CLASE + System.currentTimeMillis();
+    claseDirectorFuncion = DIRECTOR_FUNCION_CLASE + System.currentTimeMillis();
     ArrayList<String> desquicio = new ArrayList<String>();
     String dimensionEscena = "size(400, 400);";
     
@@ -101,7 +113,7 @@ class Libreto {
       
       // Se elabora el nuevo guion a partir del modelo
       if (guion[i].indexOf(LIBRETO_ETIQUETA) < 0) {
-        desquicio.add(corregirGuion(guion[i]));
+        desquicio.add(corregirGuionOriginal(guion[i]));
       }
       // Se inserta el esquicio original en el guion
       else {
@@ -125,11 +137,16 @@ class Libreto {
     // director que, al ser instanciada, dara inicio a la funcion.
     // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     String[] arrayDeLineas = new String[desquicio.size()];
-    saveStrings(CARPETA_JAVA + "/" + claseDirector + ".java", desquicio.toArray(arrayDeLineas));
+    saveStrings(CARPETA_JAVA + "/" + claseDirectorFuncion + ".java", desquicio.toArray(arrayDeLineas));
   }
   
-  private String corregirGuion(String linea) {
-    return linea.replace("public class Guion {", "public class " + claseDirector + " {");
+  
+  private String corregirGuionOriginal(String linea) {
+    return linea.replace("public class Guion {", "public class " + claseDirectorFuncion + " {");
+  }
+  
+  private String redactarGuionDesquiciado(String linea) {
+    return linea.replace("public class Guion {", "public class " + claseDirectorDesquicio + " {");
   }
   
   private String corregirEsquicio(String linea) {
@@ -137,11 +154,16 @@ class Libreto {
     return nuevaLinea.replace("void setup() {", "public void setup() {")
                      .replace("void draw() {", "public void draw() {")
                      .replace("void mousePressed() {", "public void mousePressed() {")
+                     .replace("void keyTyped() {", "public void keyTyped() {")
                      .replace("random(", "desquicioRandom(")
                      .replace("sin(", "desquicioSin(").replace("cos(", "desquicioCos(").replace("tan(", "desquicioTan(")
                      .replace("float ", "double ").replace("new float", "new double").replace("float[]", "double[]")
-                     .replace("color ", "int ")
-                     .replace("float(width)", "(float) width").replace("float(height)", "(float) height");
+                     .replace("color ", "int ").replace("color[] ", "int[] ")
+                     .replace("float(width)", "(float) width").replace("float(height)", "(float) height")
+                     .replace("f = float(c)", "f = (float) c")
+                     .replace("i = int(f * 1.4)", "i = (int)Math.round(f * 1.4)")
+                     .replace("b = byte(c / 2)", "b = 32")
+                     .replace("textFont(createFont", "//textFont(createFont");
   }
   
 }

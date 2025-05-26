@@ -48,14 +48,6 @@ class Interfaz {
   String urlEjemplosProcessing = URL_PAGINA_EJEMPLOS;
   String urlEscenaEjemplo = null;
   
-  // Paneles de la interfaz
-  PanelTexto    panelIzquierdo;
-  PanelTexto    panelCentral;
-  PanelTexto    panelDerecho;
-  PanelSuperior panelSuperior;
-  PanelInferior panelInferior;
-  Scrollbar     scrollbar;
-  
   // Fuentes tipograficas
   PFont  fuenteTexto;
   PFont  fuenteTextoResaltado;
@@ -64,9 +56,35 @@ class Interfaz {
   PFont  fuenteDesquicio;
   PFont  fuenteMenu;
   PFont  fuenteConsola;
+  
+  // Imagenes e iconos
   PImage logoProcessing;
+  PImage iconoEjecutar;
+  PImage iconoDetener;
+  PImage iconoEjecutarActivo;
+  PImage iconoDetenerActivo;
+  
+  // Componentes de la interfaz
+  PanelTexto    panelIzquierdo;
+  PanelTexto    panelCentral;
+  PanelTexto    panelDerecho;
+  PanelSuperior panelSuperior;
+  PanelInferior panelInferior;
+  Scrollbar     scrollbar;
+  Boton         botonIniciar;
+  Boton         botonDetener;
+  
+  // Indicadores de "Funcion en Curso"
+  boolean inicioDeFuncion = false;
+  Funcion funcionOriginal;
+  Funcion funcionDesquiciada;
   
   
+  /**
+   * Constructor de la interfaz
+   * Define el tamaño de la ventana del IDE y crea el
+   * libreto con el cual el usuario interactuará.
+   */
   Interfaz() {
     size(INTERFAZ_ANCHO, INTERFAZ_ALTO);
     libreto = new Libreto(urlEjemplosProcessing);
@@ -74,7 +92,7 @@ class Interfaz {
   
   
   /**
-   * dibujar
+   * desplegar
    * Funcion principal que se ocupa de dibujar cada elemento
    * de la interfaz (IDE) en cada iteracion de la funcion
    * "draw" de Processing.
@@ -83,7 +101,7 @@ class Interfaz {
    * similares, pero se agregan paneles y opciones que permiten
    * elegir esquicios (sketches) de Processing y desquiciarlos.
    */
-  void dibujar() {
+  void desplegar() {
     noStroke();
     background(INTERFAZ_COLOR_FONDO);
     
@@ -93,6 +111,7 @@ class Interfaz {
         String[] esquicio = libreto.guionOriginal(urlEscenaEjemplo);
         panelCentral.contenido(esquicio, 12, 18, fuenteEsquicio);
         panelInferior.actualizarContenido(escenaDelLibreto);
+        libreto.desquiciar(esquicio);
         urlEscenaEjemplo = null;
     }
     
@@ -103,25 +122,39 @@ class Interfaz {
     panelDerecho.dibujar();
     panelInferior.dibujar();
     scrollbar.dibujar();
+    
+    // Luego, se dibuja la botonera
+    botonIniciar.dibujar();
+    botonDetener.dibujar();
   }
   
   
-  void inicializar() {
+  /**
+   * preparar
+   * Esta funcion carga en memoria todos los recursos necesarios para
+   * construir la interfaz de usuario e inicializa los componentes
+   * que sean necesarios.
+   */
+  void preparar() {
     
     // Titulo principal de la ventana (titulo del libreto)
     windowTitle(libreto.titulo());
     
     // Se cargan las imagenes a usar en la interfaz
-    logoProcessing = loadImage(CARPETA_ICONOS + "/" + LOGO_PROCESSING);
+    logoProcessing      = loadImage(CARPETA_ICONOS + "/" + LOGO_PROCESSING);
+    iconoEjecutar       = loadImage(CARPETA_ICONOS + "/" + ICONO_EJECUTAR);
+    iconoDetener        = loadImage(CARPETA_ICONOS + "/" + ICONO_DETENER);
+    iconoEjecutarActivo = loadImage(CARPETA_ICONOS + "/" + ICONO_EJECUTAR_ACTIVO);
+    iconoDetenerActivo  = loadImage(CARPETA_ICONOS + "/" + ICONO_DETENER_ACTIVO);
     
     // Se definen las fuentes que se utilizaran en la interfaz    
-    fuenteTexto          = createFont(FUENTE_TEXTO_REGULAR, 12);
-    fuenteTextoResaltado = createFont(FUENTE_TEXTO_NEGRITA, 12);
-    fuenteMenu           = createFont(FUENTE_TEXTO_MENU, 13);
-    fuenteTextoCintillo  = createFont(FUENTE_TEXTO_SOLAPA, 11);
-    fuenteEsquicio       = createFont(FUENTE_TEXTO_ESQUICIO, 14);
+    fuenteTexto          = createFont(FUENTE_TEXTO_REGULAR,   12);
+    fuenteTextoResaltado = createFont(FUENTE_TEXTO_NEGRITA,   12);
+    fuenteMenu           = createFont(FUENTE_TEXTO_MENU,      13);
+    fuenteTextoCintillo  = createFont(FUENTE_TEXTO_SOLAPA,    12);
+    fuenteEsquicio       = createFont(FUENTE_TEXTO_ESQUICIO,  14);
     fuenteDesquicio      = createFont(FUENTE_TEXTO_DESQUICIO, 13);
-    fuenteConsola        = createFont(FUENTE_TEXTO_CONSOLA, 14);
+    fuenteConsola        = createFont(FUENTE_TEXTO_CONSOLA,   14);
     
     //
     // DIAGRAMACION PRINCIPAL DE LA PAGINA
@@ -204,6 +237,39 @@ class Interfaz {
     panelCentral.colorTexto(INTERFAZ_COLOR_TEXTO_REGULAR);
     panelCentral.alturaLinea(INTERFAZ_ALTURA_LINEA_CODIGO); 
     panelCentral.cintillo(INTERFAZ_TEXTO_PANEL_CENTRO, INTERFAZ_COLOR_CINTILLO, INTERFAZ_COLOR_TEXTO_REGULAR);
+    
+    
+    //
+    // 7. BOTONERA
+    // Finalmente, se añaden los botones principales a la interfaz
+    botonIniciar = new Boton(panelSuperior.x + INTERFAZ_MARGEN_IZQUIERDO, panelSuperior.y + INTERFAZ_MARGEN_SUPERIOR, iconoEjecutar, iconoEjecutarActivo);
+    botonDetener = new Boton(panelSuperior.x + INTERFAZ_MARGEN_IZQUIERDO + botonIniciar.ancho() + INTERFAZ_MARGEN_INTERNO, panelSuperior.y + INTERFAZ_MARGEN_SUPERIOR, iconoDetener, iconoDetenerActivo);
+  }
+  
+  
+  /**
+   * dirigir
+   * Determina si la funcion debe comenzar o detenerse
+   */
+  void dirigir() {
+    if (botonIniciar.enFoco() && !inicioDeFuncion) {
+      inicioDeFuncion = true;
+      botonIniciar.activar();
+      botonDetener.inactivar();
+      funcionOriginal = new Funcion(libreto.directorDesignadoParaEsquicio());
+      funcionOriginal.iniciar();
+
+    }
+    else if (botonDetener.enFoco() && inicioDeFuncion) {
+      inicioDeFuncion = false;
+      botonDetener.activar();
+      botonIniciar.inactivar();
+      if (funcionOriginal != null) {
+        funcionOriginal.terminar();
+        funcionOriginal = null;
+      }
+      botonDetener.inactivar();
+    }
   }
   
 
@@ -477,7 +543,52 @@ class Interfaz {
         textoConsola[i] = nombre != null ? INTERFAZ_TEXTO_CONSOLA[i].replace(INTERFAZ_TEXTO_ETIQUETA, nombre) :
                           INTERFAZ_TEXTO_CONSOLA[i].indexOf(INTERFAZ_TEXTO_ETIQUETA) < 0 ? INTERFAZ_TEXTO_CONSOLA[i] : "";
       }
-      contenido(textoConsola, 12, 18, fuenteConsola);
+      contenido(textoConsola, 12, 15, fuenteConsola);
+    }
+  }
+  
+  /**
+   * Boton
+   * Clase para representar los botones principales de la interfaz
+   */
+  class Boton {
+    
+    int x;
+    int y;
+    PImage imagenActivo;
+    PImage imagenInactivo;
+    boolean estaActivo = false;
+    
+    Boton(int x, int y, PImage imagenInactivo, PImage imagenActivo) {
+      this.x = x;
+      this.y = y;
+      this.imagenActivo = imagenActivo;
+      this.imagenInactivo = imagenInactivo;      
+    }
+    
+    int ancho() {
+      return this.estaActivo ? this.imagenActivo.width : this.imagenInactivo.width;
+    }
+    
+    int alto() {
+      return this.estaActivo ? this.imagenActivo.height : this.imagenInactivo.height;
+    }
+    
+    void dibujar() {
+      image(this.estaActivo ? this.imagenActivo : this.imagenInactivo, x, y);
+    }
+    
+    void activar() {
+      this.estaActivo = true;
+    }
+    
+    void inactivar() {
+      this.estaActivo = false;
+    }
+    
+    boolean enFoco() {
+      return mouseX > this.x && mouseX < this.x + this.ancho() &&
+             mouseY > this.y && mouseY < this.y + this.alto();
     }
   }
 }

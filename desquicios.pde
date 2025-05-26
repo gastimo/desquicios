@@ -1,9 +1,9 @@
 // 
 // FUNCIONES AGOTADAS
 //
-// El "sketch" —esquicio, en castellano— es el código escrito
-// en Processing para producir una obra. Es su guion. 
-// El "desquicio" es, entonces, la subversión de este guion 
+// El "sketch" —esquicio, en castellano— es el código escrito en
+// Processing para producir una obra. En cierta forma, es su guion.
+// El "desquicio" sería, entonces, la subversión de este guion 
 // programático que resignifica sus "FUNCIONES AGOTADAS" para
 // producir un espectáculo que invite a repensar la propia  
 // escritura de código.
@@ -23,7 +23,6 @@
 
 Web web;
 Interfaz interfaz;
-Libreto libreto;
 
 
 void settings() {
@@ -39,21 +38,13 @@ void setup() {
   // y desplegar los "sketches" originales (esquicios) de 
   // los ejemplos disponibles en el sitio oficial.
   // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv  
-  interfaz.inicializar();
- 
-  
-  // ABRIR EL LIBRETO CON EL GUION DESQUICIADO
-  // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-  //libreto.definirTitulo(pagina.obtenerTitulo());
-  //libreto.desquiciar(pagina.obtenerEsquicio());
-  
-  
-  // INICIAR LA FUNCION
-  // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-  //Funcion funcion = new Funcion(libreto.nombreDirector());
-  //funcion.agotar();
+  interfaz.preparar();
 }
 
 void draw() {
-  interfaz.dibujar();
+  interfaz.desplegar();
+}
+
+void mouseClicked() {
+  interfaz.dirigir();
 }

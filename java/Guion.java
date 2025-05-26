@@ -1,23 +1,42 @@
 import processing.core.PApplet;
+import java.awt.Frame;
+import javax.swing.JFrame;
+import processing.awt.PSurfaceAWT;
+import processing.awt.PSurfaceAWT.SmoothCanvas;
 
 public class Guion {
     
+    Funcion funcionEnCurso;
+    
     public Funcion funcion() {
-        return new Funcion();
+        funcionEnCurso = new Funcion();
+        return funcionEnCurso;
     }
  
+    public void terminar() {
+        if (funcionEnCurso != null) {
+            funcionEnCurso.cerrar();
+            funcionEnCurso = null;
+        }
+    }
+    
     class Funcion extends PApplet {
         
         Funcion() {
-            System.out.println("El director inicia la FUNCION");
         }
 
         [[[INSERTAR ESQUICIO ACA]]]
     
         
+        void cerrar() {
+            System.out.println("El director da por concluida la funcion original");
+            Frame frame = ( (SmoothCanvas) ((PSurfaceAWT)surface).getNative()).getFrame();
+            frame.dispose();
+        }
+        
         // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         // 
-        // REDEFINICIÓN DE FUNCIONES "FINALES" (CONSTANTES)
+        // REDEFINICION DE FUNCIONES "FINALES" (CONSTANTES)
         // Como las funciones estándares de la clase PApplet 
         // que están marcadas como "final" no pueden ser 
         // sobreescritas, se las redefine bajo otro nombre.
@@ -42,12 +61,24 @@ public class Guion {
         
         // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         // 
-        // REDEFINICIÓN DE FUNCIONES CON PARÁMETROS "FLOAT"
+        // REDEFINICION DE FUNCIONES CON PARAMETROS "FLOAT"
         // Redefinición de las funciones estándares de la clase
         // PApplet para corregir temas de precición cuando 
         // tienen argumentos que son de tipo "float".
         // 
-        // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv   
+        // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv  
+        public void fill(int rgb, double alpha) {
+            super.fill(rgb, (float)alpha);
+        }
+        public void fill(double gray) {
+            super.fill((float)gray);
+        }
+        public void fill(double gray, double alpha) {
+            super.fill((float)gray, (float)alpha);
+        }
+        public void fill(double v1, double v2, double v3) {
+            super.fill((float)v1, (float)v2, (float)v3);
+        }
         public void stroke(double rgb) {
             super.stroke((int)Math.floor(rgb));
         }
@@ -56,6 +87,15 @@ public class Guion {
         }
         public void ellipse(double a, double b, double c, double d) {
             super.ellipse((float)a, (float)b, (float)c, (float)d);
+        }
+        public void arc(double a, double b, double c, double d, double start, double stop) {
+            super.arc((float) a, (float) b, (float) c, (float) d, (float) start, (float) stop);
+        }
+        public void arc(double a, double b, double c, double d, double start, double stop, int mode) {
+            super.arc((float) a, (float) b, (float) c, (float) d, (float) start, (float) stop, mode);
+        }
+        public void bezier(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4) {
+            super.bezier((float) x1, (float) y1, (float) x2, (float) y2, (float) x3, (float) y3, (float) x4, (float) y4);
         }
         public int lerpColor(int c1, int c2, double amt) {
             return super.lerpColor(c1, c2, (float) amt);

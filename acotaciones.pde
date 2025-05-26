@@ -19,11 +19,19 @@ String CARPETA_ESQUICIOS = "esquicios";
 String CARPETA_JAVA      = "java";
 
 // Nombres y metodos de las clases dinamicas
-String DIRECTOR_CLASE    = "Director";
-String DIRECTOR_METODO   = "funcion";
+String DIRECTOR_FUNCION_CLASE    = "Director";
+String DIRECTOR_DESQUICIO_CLASE  = "Director";
+String DIRECTOR_METODO_DIRECCION = "funcion";
+String DIRECTOR_METODO_FINALIZAR = "terminar";
+
 
 // Arhivos de imágenes 
-String LOGO_PROCESSING   = "/processing-logo-02.png";
+String LOGO_PROCESSING       = "/processing-logo-02.png";
+String ICONO_EJECUTAR        = "/icono-RUN.png";
+String ICONO_DETENER         = "/icono-STOP.png";
+String ICONO_EJECUTAR_ACTIVO = "/icono-RUN-active.png";
+String ICONO_DETENER_ACTIVO  = "/icono-STOP-active.png";
+
 
 
 // =========================================================
@@ -49,20 +57,21 @@ String FUENTE_TEXTO_CONSOLA   = "fuentes/SourceCodePro-Medium.ttf";
 // =========================================================
 
 // Dimensiones y espaciados de los paneles de la interfaz
-int    INTERFAZ_ANCHO = 1080;
-int    INTERFAZ_ALTO  = 860;
+int    INTERFAZ_ANCHO                 = 1080;
+int    INTERFAZ_ALTO                  = 860;
 int    INTERFAZ_ANCHO_PANEL_IZQ       = 166;
 int    INTERFAZ_ANCHO_PANEL_DER       = 238;
 int    INTERFAZ_ANCHO_SCROLLBAR       = 18;
-int    INTERFAZ_ALTO_PANEL_SUPERIOR   = 80;
-int    INTERFAZ_ALTO_PANEL_INFERIOR   = 122;
+int    INTERFAZ_ALTO_PANEL_SUPERIOR   = 86;
+int    INTERFAZ_ALTO_PANEL_INFERIOR   = 116;
 
 int    INTERFAZ_ALTO_SUBPANEL_CINTILLO = 30; // Parte superior del panel (opcional)
 int    INTERFAZ_ALTO_SUBPANEL_ZOCALO   = 24; // Parte inferior del panel (opcional)
 
 int    INTERFAZ_MARGEN_IZQUIERDO       = 12;
 int    INTERFAZ_MARGEN_DERECHO         = 8; 
-int    INTERFAZ_MARGEN_INTERNO         = 8; // Separacion ("calle") entre paneles
+int    INTERFAZ_MARGEN_INTERNO         = 8;  // Separacion ("calle") entre paneles
+int    INTERFAZ_MARGEN_SUPERIOR        = 41; // Separación entre el menu y la botonera
 
 // Espaciados y alturas de las lineas de texto ("line-height")
 int    INTERFAZ_ALTURA_LINEA_CODIGO    = 18;
