@@ -5,6 +5,7 @@
 // Para producir esta función interviene una clase llamada "Director"
 // que es generada dinámicamente a partir del guion recibido y realiza
 // los "desquicios" sobre el sketch original de Processing.
+//
 // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
 import javax.tools.*;

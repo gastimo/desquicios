@@ -1,13 +1,16 @@
 // 
 // WEB - ACCESO Y CACHE DE PAGINAS
-// Para evitar multiples accesos a la misma pagina web, este cache
-// mantiene copias de las ultimas paginas accedidas.
+// Para evitar multiples accesos a la misma pagina web, este clase
+// funciona como un cache que mantiene copias de las ultimas paginas 
+// accedidas:
 // - Se mantiene una copia del HTML en memoria (en un HashMap)
 // - Se mantiene una copia del HTML en un archivo en el disco
-// Cuando el libreto solicita acceder a una nueva pagina, el cache
-// intenta primero recuperarla de la memoria. Si ahi no la encuentra
-// intenta en segundo lugar recuperarla del disco. Y si ahi tampoco,
+//
+// Cuando se solicita acceder a una nueva pagina, el cache intenta
+// primero recuperarla de la memoria (hashmap). Si ahi no la encuentra
+// intenta, en segundo lugar, recuperarla del disco. Y si ahi tampoco
 // esta, recien entonces hace la peticion HTTP para leer la pagina web.
+//
 // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
 import java.net.URL;
@@ -16,13 +19,14 @@ import java.net.MalformedURLException;
 
 class Web {
   
+  // Cache de paginas HTML leidas
   HashMap<String, String[]> cache = new HashMap<String, String[]>();  
 
 
   /**
    * obtener
-   * Funcion principal para gestionar el cache de acceso a 
-   * las paginas
+   * Funcion principal para gestionar el cache de acceso
+   * a las paginas HTML
    */
   String[] obtener(String url) {
     

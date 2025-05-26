@@ -1,38 +1,21 @@
 // 
 // PAGINA
 // Clases que permiten leer de manera online páginas web del 
-// sitio oficial de Processing y manipular sus contenidos,
-// principalmente con el propósito de extraer los esquicios 
-// (sketches) que se utilizan como ejemplos en el sitio.
+// sitio oficial de Processing y manipular sus contenidos.
+// Por ejemplo:
+// - Encontrar y extraer la seccion de ejemplos
+// - Extraer del HTML los links a cada ejemplo (con sus nombres)
+// - Encontrar y extraer el codigo de los "sketches" (esquicios)
+//
 // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-
-
-// Codigo HTML de apertura/cierre para detectar las lineas a extraer
-String ETIQUETA_APERTURA_TITULO   = "<title";
-String ETIQUETA_CIERRE_TITULO     = "</title>";
-
-String ETIQUETA_APERTURA_ESQUICIO = "<code";
-String ETIQUETA_CIERRE_ESQUICIO   = "</code>";
-
-String ETIQUETA_APERTURA_EJEMPLOS = "ExamplesList-module--root";
-String ETIQUETA_CIERRE_EJEMPLOS   = "<h2 id=\"topics\">";
-
-String ETIQUETA_APERTURA_LINK     = "<a href=";
-String ETIQUETA_CIERRE_LINK       = "</a>";
-
-String ETIQUETA_APERTURA_LINK_NOMBRE = "<h4>";
-String ETIQUETA_CIERRE_LINK_NOMBRE   = "</h4>";
-
-String ETIQUETA_CIERRE = ">";
-String SEPARADOR = ";";
-
 
 
 /**
  * Pagina
  * Objeto que descarga el contenido HTML de una página a partir 
- * de una URL y permite manipular su contenido para extraer el
- * texto del esquicio, o sea, el "sketch" de Processing.
+ * de una URL y permite analizar y manipular su contenido, es
+ * decir, "parsear" el codigo, realizar reemplazos y extraer
+ * los fragmentos que correspondan segun el tipo de pagina.
  */
  
 class Pagina {
