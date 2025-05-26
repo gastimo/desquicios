@@ -65,7 +65,7 @@ int    INTERFAZ_MARGEN_DERECHO         = 8;
 int    INTERFAZ_MARGEN_INTERNO         = 8; // Separacion ("calle") entre paneles
 
 // Espaciados y alturas de las lineas de texto ("line-height")
-int    INTERFAZ_ALTURA_LINEA_CODIGO    = 20;
+int    INTERFAZ_ALTURA_LINEA_CODIGO    = 18;
 int    INTERFAZ_ALTURA_LINEA_NAVEGADOR = 24;
 int    INTERFAZ_ALTURA_LINEA_CONSOLA   = 19;
 
@@ -91,15 +91,15 @@ color INTERFAZ_NO_COLOR              = -1;
 
 
 // Textos a desplegar en la interfaz
-String INTERFAZ_TITULO             = "LIBRETO - Desquicios";
 String INTERFAZ_TEXTO_PANEL_IZQ    = "Escenas del Libreto";
 String INTERFAZ_TEXTO_PANEL_DER    = "Acotaciones del Desquicio";
-String INTERFAZ_TEXTO_PANEL_CENTRO = "Esquicio Original (sketch)";
+String INTERFAZ_TEXTO_PANEL_CENTRO = "Esquicio de la Escena (Sketch Original)";
 String INTERFAZ_TEXTO_ETIQUETA     = "[[[NOMBRE_EJEMPLO]]]";
 String INTERFAZ_TEXTO_CONSOLA_01   = "> FUNCIONES AGOTADAS!!!";
 String INTERFAZ_TEXTO_CONSOLA_02   = "> Guion original: \"" + INTERFAZ_TEXTO_ETIQUETA + "\" - Desquicio en progreso...";
 String INTERFAZ_TEXTO_MENU         = "File      Edit      Sketch      Debug      Tools      Help";
 String[] INTERFAZ_TEXTO_CONSOLA    = new String[]{INTERFAZ_TEXTO_CONSOLA_01, INTERFAZ_TEXTO_CONSOLA_02};
+
 
 
 // =========================================================
@@ -108,7 +108,7 @@ String[] INTERFAZ_TEXTO_CONSOLA    = new String[]{INTERFAZ_TEXTO_CONSOLA_01, INT
 //
 // =========================================================
 
-String LIBRETO_TITULO       = "LIBRETO: ";
+String LIBRETO_TITULO       = "LIBRETO - Desquicios";
 String LIBRETO_GUION_MODELO = "Guion.java";
 String LIBRETO_ETIQUETA     = "[[[INSERTAR ESQUICIO ACA]]]";
 

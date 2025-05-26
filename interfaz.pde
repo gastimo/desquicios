@@ -1,19 +1,32 @@
 // 
 // INTERFAZ
-// Conjunto de clases para construir e interactuar con la parodia
-// de la interfaz estandar de Processing que emula gran parte se sus
-// componentes pero que incorpora, al mismo tiempo, otros elementos:
+// Conjunto de clases para construir e interactuar con la "parodia"
+// de la interfaz estandar de Processing. En lugar de trabajar con 
+// un unico "sketch" (o "esquicio"), esta falsa interfaz construye
+// un libreto donde cada una de sus escenas corresponde a un ejemplo
+// tomado de la pagina oficial de Processing.
 //
-// Paneles y elementos de la interfaz modificada:
+//   https://processing.org/examples
 //
-// - PANEL IZQUIERDO: "Escenas del Libreto". Es un navegador de paginas.
-// - PANEL CENTRAL  : "Esquicio". Codigo del "sketch" original de la pagina.
-// - PANEL DERECHO  : "Acotaciones". Despliega los "desquicios" a realizar.
+// Esta interfaz pretende emular los componentes del IDE estandar de
+// la herramienta, pero incorporando elementos adicionales para poder
+// visualizar e interpretar el libreto y los esquicios de cada escena.
 //
-// El contenido del navegador del panel izquierdo es completado con los
-// ejemplos disponibles en la pagina oficial de Processing.
+// El panel lateral izquierdo funciona como un "navegador" donde se
+// despliegan todas las escenas del libreto. Al elegir (hacer clic)
+// cualquiera de estas escenas, se carga en el panel central el 
+// codigo del esquicio (sketch original) descargado de Processing.
 //
-//     https://processing.org/examples
+// Presionando el boton de "reproduccion" que esta disponible en la
+// parte superior de la interfaz, se da inicio a la funcion que toma
+// el codigo del esquicio original y lo subvierte (desquicia) mediante
+// una reinterpretacion del comportamiento de las funciones estandares.
+//
+// El panel derecho muestra acotaciones sobre los desquicios realizados
+// en el codigo del panel central.
+//
+// Por ultimo, el panel inferior o "consola" muestra informacion en
+// tiempo real de la funcion en curso.
 //
 // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
@@ -27,10 +40,13 @@
  */
 class Interfaz {
   
-  // Pagina web oficial con ejemplos de Processing
-  Pagina ejemplos;
-  String urlEjemplo = null;
-  String nombreEjemplo = null;
+  // Definicion del libreto a mostrar en la interfaz
+  Libreto libreto;
+  String  escenaDelLibreto = null;
+
+  // Variables para gestionar los links a Processing
+  String urlEjemplosProcessing = URL_PAGINA_EJEMPLOS;
+  String urlEscenaEjemplo = null;
   
   // Paneles de la interfaz
   PanelTexto    panelIzquierdo;
@@ -51,9 +67,9 @@ class Interfaz {
   PImage logoProcessing;
   
   
-  Interfaz(Web web) {
+  Interfaz() {
     size(INTERFAZ_ANCHO, INTERFAZ_ALTO);
-    ejemplos = new Pagina(web, URL_PAGINA_EJEMPLOS);
+    libreto = new Libreto(urlEjemplosProcessing);
   }
   
   
@@ -71,16 +87,16 @@ class Interfaz {
     noStroke();
     background(INTERFAZ_COLOR_FONDO);
     
-    // Se verifica si es necesario cargar el esquicio
-    if (urlEjemplo != null) {
-        Pagina ejemplo = new Pagina(web, urlEjemplo);
-        String[] esquicio = ejemplo.obtenerEsquicio();
+    // Se verifica si es necesario cargar el guion original
+    // del esquicio de Processing en el panel central.
+    if (urlEscenaEjemplo != null) {
+        String[] esquicio = libreto.guionOriginal(urlEscenaEjemplo);
         panelCentral.contenido(esquicio, 12, 18, fuenteEsquicio);
-        urlEjemplo = null;
-        panelInferior.actualizarContenido(nombreEjemplo);
+        panelInferior.actualizarContenido(escenaDelLibreto);
+        urlEscenaEjemplo = null;
     }
     
-    // Se dibujan todos los paneles
+    // Se dibujan todos los paneles de la interfaz
     panelSuperior.dibujar();
     panelIzquierdo.dibujar();
     panelCentral.dibujar();
@@ -90,9 +106,10 @@ class Interfaz {
   }
   
   
-  void inicializar(String titulo) {
-    // Titulo principal de la ventana
-    windowTitle(titulo);
+  void inicializar() {
+    
+    // Titulo principal de la ventana (titulo del libreto)
+    windowTitle(libreto.titulo());
     
     // Se cargan las imagenes a usar en la interfaz
     logoProcessing = loadImage(CARPETA_ICONOS + "/" + LOGO_PROCESSING);
@@ -130,7 +147,7 @@ class Interfaz {
     panelInferior = new PanelInferior(0, height - INTERFAZ_ALTO_PANEL_INFERIOR, width, INTERFAZ_ALTO_PANEL_INFERIOR);
     panelInferior.colorFondo(INTERFAZ_COLOR_CONSOLA);
     panelInferior.colorTexto(INTERFAZ_COLOR_TEXTO_CONSOLA);
-    panelInferior.actualizarContenido(nombreEjemplo);
+    panelInferior.actualizarContenido(escenaDelLibreto);
     panelInferior.alturaLinea(INTERFAZ_ALTURA_LINEA_CONSOLA);
     panelInferior.cintillo("", INTERFAZ_COlOR_SEPARADOR, INTERFAZ_COLOR_TEXTO_REGULAR);
     panelInferior.zocalo  ("", INTERFAZ_COLOR_ZOCALO, INTERFAZ_COLOR_TEXTO_REGULAR);
@@ -154,7 +171,7 @@ class Interfaz {
     panelIzquierdo.colorFondo(INTERFAZ_COLOR_PANEL);
     panelIzquierdo.colorTexto(INTERFAZ_COLOR_TEXTO_REGULAR);
     panelIzquierdo.resaltarLineaEnFoco();
-    panelIzquierdo.opciones(ejemplos.obtenerEjemplos(), 10, 12, fuenteTexto, fuenteTextoResaltado);
+    panelIzquierdo.opciones(libreto.escenas(), 10, 12, fuenteTexto, fuenteTextoResaltado);
     panelIzquierdo.alturaLinea(INTERFAZ_ALTURA_LINEA_NAVEGADOR);
     panelIzquierdo.cintillo(INTERFAZ_TEXTO_PANEL_IZQ, INTERFAZ_COLOR_CINTILLO, INTERFAZ_COLOR_TEXTO_REGULAR);
 
@@ -370,7 +387,7 @@ class Interfaz {
           boolean resaltarLinea = false;
           if (i == lineaSeleccionada && resaltarLineaEnFoco) {
             resaltarLinea = true;
-            dispararAccion = ultimaLineaSeleccionada == -1;
+            dispararAccion = ultimaLineaSeleccionada == -1 ? true : dispararAccion;
             fill(INTERFAZ_COLOR_LINEA_SELECCION);
             rect(x, y + this.textosPosY + alturaCintillo + (i*this.alturaLinea) - (this.alturaLinea/3), this.ancho, this.alturaLinea);
           }
@@ -386,8 +403,8 @@ class Interfaz {
       if (dispararAccion) {
         if (lineaSeleccionada != ultimaLineaSeleccionada) {
           panelCentral.limpiarContenido();
-          urlEjemplo = this.links[lineaSeleccionada];
-          nombreEjemplo = this.textos[lineaSeleccionada];
+          urlEscenaEjemplo = this.links[lineaSeleccionada];
+          escenaDelLibreto = this.textos[lineaSeleccionada];
           ultimaLineaSeleccionada = lineaSeleccionada;
         }
       }

@@ -28,19 +28,18 @@ Libreto libreto;
 
 void settings() {
   web = new Web();
-  interfaz = new Interfaz(web);
+  interfaz = new Interfaz();
 }
 
 void setup() {
   
-  // LA PARODIA DEL IDE (EL "META-PROCESSING")
+  // LA INTERFAZ DEL "META-PROCESSING" (PARODIA DEL IDE)
   // Lo primero que se hace es abrir la ventana de la pseudo-
   // interfaz de Processing desde donde se pueden consultar
-  // y desplegar los "sketches" (esquicios) de los ejemplos
-  // disponibles en el sitio oficial.
+  // y desplegar los "sketches" originales (esquicios) de 
+  // los ejemplos disponibles en el sitio oficial.
   // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv  
-  interfaz.inicializar(INTERFAZ_TITULO);
-  
+  interfaz.inicializar();
  
   
   // ABRIR EL LIBRETO CON EL GUION DESQUICIADO

@@ -1,29 +1,61 @@
 // 
 // LIBRETO
-// El libreto es el dispositivo creado para alojar el guion escrito 
-// de la obra a representar. Contiene el código subvertido, es decir,
-// el desquicio del esquicio (sketch) original de Processing.
+// El libreto contiene el conjunto de escenas que se presentaran
+// en la funcion. Cada escena es uno de los "sketches" de ejemplo
+// tomados del sitio oficial de Processing.
+// 
+// Cuando desde la interfaz se selecciona una de las escenas del
+// libreto (un ejemplo de Processing), se busca en la web la
+// pagina correspondiente para descargar su "sketch" (el esquicio)
+// y mostrarlo en el panel principal de la interfaz.
 //
-// El libreto es, al mismo tiempo, una pantomima del propio IDE 
-// de la herramienta. Una parodia de sus funciones originales.
+// El libreto, luego, designa y crea una clase Java dinamica que 
+// asumira el rol de "Director" de la funcion y es la responsable de
+// de llevar a cabo la adaptacion del esquicio original.
+//
+// La adpatacion consiste en reinterpretar el codigo del esquicio
+// y subvertir su guion (desquiciarlo), alterando el comportamiento
+// de las funciones estandares de Processing.
 //
 // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
 
 class Libreto {
   
+  Pagina ejemplosOficiales;
+  String[] guionOriginal;  // Esquicio de Processing
   String[] guion;
   String claseDirector = DIRECTOR_CLASE;
 
 
+  /**
+   * Constructor del libreto
+   * A partir del link de la pagina web oficial de Processing
+   * se construye un libreto conteniendo cada uno de los ejemplos
+   * presentados en el sitio, como si fuera una escena del este.
+   */
+  Libreto (String urlPaginaOficial) {
+    ejemplosOficiales = new Pagina(web, urlPaginaOficial);
+  }
+  
   
   /**
-   * definirTitulo
-   * Coloca el titulo a deplegar en la ventana del 
-   * libreto (el IDE).
+   * titulo
+   * Retorna el titulo del libreto (que aparera como titulo
+   * la ventana de la interfaz.
    */
-  void definirTitulo(String titulo) {
-    windowTitle(LIBRETO_TITULO + titulo);
+  String titulo() {
+    return LIBRETO_TITULO;
+  }
+  
+  
+  /**
+   * escenas
+   * Devuelve una lista con cada uno de los ejemplos recuperados
+   * del sitio web oficial de Processing.
+   */
+  String[] escenas() {
+    return ejemplosOficiales.obtenerEjemplos();
   }
   
   
@@ -35,6 +67,18 @@ class Libreto {
   String nombreDirector() {
     return claseDirector;
   }
+  
+  /**
+   * guionOriginal
+   * Dado el link a una de las paginas de ejemplos de Processing
+   * se descarga el contenido HTML y se extrae el codigo del 
+   * esquicio (sketch) original del ejemplo
+   */
+  String[] guionOriginal(String urlPaginaEjemplo) {
+    Pagina ejemplo = new Pagina(web, urlPaginaEjemplo);
+    guionOriginal = ejemplo.obtenerEsquicio();
+    return guionOriginal;
+  }  
   
   
   /**
