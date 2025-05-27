@@ -6,13 +6,29 @@ import processing.awt.PSurfaceAWT.SmoothCanvas;
 
 public class [[[GUION]]] {
     
-    Funcion funcionEnCurso;
+    DESQUICIO funcionEnCurso;
     
-    public Funcion funcion() {
-        funcionEnCurso = new Funcion();
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    // 
+    // FUNCION
+    // Metodo principal de la clase "Director" que
+    // retorna el objeto correspondiente a la funcion
+    // en curso (un "PApplet").
+    //
+    // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+    public DESQUICIO funcion() {
+        funcionEnCurso = new DESQUICIO();
         return funcionEnCurso;
     }
  
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    // 
+    // METODOS DINAMICOS DE LA INTERFAZ
+    // Los siguientes metodos son invocados en forma
+    // dinamica desde la interfaz para manipular el
+    // desarrollo de la funcion en "runtime".
+    //
+    // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     public void terminar() {
         if (funcionEnCurso != null) {
             funcionEnCurso.cerrar();
@@ -29,15 +45,35 @@ public class [[[GUION]]] {
         }
     }
     
-    class Funcion extends PApplet {
+    public void esquicio(String[] codigoOriginal) {
+        if (funcionEnCurso != null) {
+            funcionEnCurso.esquicio(codigoOriginal);
+        }
+    }
+    
+    
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    // 
+    // Clase DESQUICIO
+    // Es el objeto que extiende de la clase "PApplet"
+    // y que representa la funcion en curso.
+    // El contenido de esta clase es generado dinamicamente
+    // para añadir el codigo del desquicio que se presentara. 
+    // 
+    // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+    class DESQUICIO extends PApplet {
         
-        boolean concluida = false;
+        boolean  concluida = false;
+        String[] esquicio;
         
-        Funcion() {
+        DESQUICIO() {
         }
 
         [[[INSERTAR ESQUICIO ACA]]]
         
+        void esquicio(String[] codigoOriginal) {
+            this.esquicio = codigoOriginal;
+        }
         
         void cerrar() {
             if (!this.concluida) {
@@ -91,7 +127,17 @@ public class [[[GUION]]] {
         // PApplet para corregir temas de precición cuando 
         // tienen argumentos que son de tipo "float".
         // 
-        // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv  
+        // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv 
+        public void background(int gray) {
+        }
+        public void background(double gray) {
+        }
+        public void background(double gray, double alpha) {   
+        }
+        public void background(double v1, double v2, double v3) {
+        }
+        public void background(double v1, double v2, double v3, double alpha) {   
+        }
         public void fill(int rgb, double alpha) {
             super.fill(rgb, (float)alpha);
         }

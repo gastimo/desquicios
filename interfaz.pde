@@ -41,8 +41,9 @@
 class Interfaz {
   
   // Definicion del libreto a mostrar en la interfaz
-  Libreto libreto;
-  String  escenaDelLibreto = null;
+  Libreto  libreto;
+  String   escenaDelLibreto = null;  // Nombre del ejemplo de Processing seleccionado
+  String[] esquicioDeLaEscena;       // Codigo del sketch del ejemplo de Processing
 
   // Variables para gestionar los links a Processing
   String urlEjemplosProcessing = URL_PAGINA_EJEMPLOS;
@@ -108,11 +109,9 @@ class Interfaz {
     // Se verifica si es necesario cargar el guion original
     // del esquicio de Processing en el panel central.
     if (urlEscenaEjemplo != null) {
-        String[] esquicio = libreto.guionOriginal(urlEscenaEjemplo);
-        panelCentral.contenido(esquicio, 12, 18, fuenteEsquicio);
-        panelInferior.actualizarContenido(escenaDelLibreto);
-        libreto.guionarEsquicio(esquicio,  escenaDelLibreto);     // Se genera la clase Java con el guion del esquicio
-        libreto.guionarDesquicio(esquicio, escenaDelLibreto);    // Se genera la clase Java con el guion del desquicio
+        esquicioDeLaEscena = libreto.guionOriginal(urlEscenaEjemplo);
+        panelCentral.contenido(esquicioDeLaEscena, 12, 18, fuenteEsquicio);
+        panelInferior.actualizarContenido(escenaDelLibreto);  // Actualizar el texto que aparece en la consola
         urlEscenaEjemplo = null;
     }
     
@@ -280,13 +279,22 @@ class Interfaz {
       inicioDeFuncion = true;
       botonIniciar.activar();
       botonDetener.inactivar();
-      
-      // Iniciar la funcion para el guion original
+
+      // FUNCION AGOTADA
+      // Se crear una funcion (PApplet) para representar la escena
+      // correspondiente al codigo original del ejemplo (el esquicio).
+      // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+      libreto.guionarEsquicio(esquicioDeLaEscena,  escenaDelLibreto);        // Se genera clase Java con el guion del "Esquicio"
       funcionOriginal = new Funcion(libreto.directorDesignadoParaEsquicio());
       funcionOriginal.iniciar(860, 180);
       
-      // Iniciar la funcion para el guion intervenido
+      // FUNCION DESQUICIADA
+      // Se crear una funcion (PApplet) para representar la escena
+      // correspondiente al codigo original del ejemplo (el esquicio).
+      // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+      libreto.guionarDesquicio(esquicioDeLaEscena, escenaDelLibreto);       // Se genera clase Java con el guion del "DESQUICIO"
       funcionDesquiciada = new Funcion(libreto.directorDesignadoParaDesquicio());
+      funcionDesquiciada.asignarEsquicio(esquicioDeLaEscena);
       funcionDesquiciada.iniciar(860, 600);
     }
   }

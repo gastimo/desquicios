@@ -6,13 +6,29 @@ import processing.awt.PSurfaceAWT.SmoothCanvas;
 
 public class [[[GUION]]] {
     
-    Funcion funcionEnCurso;
+    Esquicio funcionEnCurso;
     
-    public Funcion funcion() {
-        funcionEnCurso = new Funcion();
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    // 
+    // FUNCION
+    // Metodo principal de la clase "Director" que
+    // retorna el objeto correspondiente a la funcion
+    // en curso (un "PApplet").
+    //
+    // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+    public Esquicio funcion() {
+        funcionEnCurso = new Esquicio();
         return funcionEnCurso;
     }
  
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    // 
+    // METODOS DINAMICOS DE LA INTERFAZ
+    // Los siguientes metodos son invocados en forma
+    // dinamica desde la interfaz para manipular el
+    // desarrollo de la funcion en "runtime".
+    //
+    // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     public void terminar() {
         if (funcionEnCurso != null) {
             funcionEnCurso.cerrar();
@@ -29,11 +45,21 @@ public class [[[GUION]]] {
         }
     }
     
-    class Funcion extends PApplet {
+
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    // 
+    // Clase Esquicio
+    // Es el objeto que extiende de la clase "PApplet"
+    // y que representa la funcion en curso.
+    // El contenido de esta clase es generado dinamicamente
+    // para añadir el codigo del esquicio que se presentara. 
+    // 
+    // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+    class Esquicio extends PApplet {
         
         boolean concluida = false;
         
-        Funcion() {
+        Esquicio() {
         }
 
         [[[INSERTAR ESQUICIO ACA]]]

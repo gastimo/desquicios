@@ -60,6 +60,21 @@ class Funcion {
       PApplet.runSketch(args, accion);
     }
     
+    void asignarEsquicio(String[] esquicioOriginal) {
+      try {
+        Method[] metodosDirector = claseDirector.getMethods();
+        for (Method metodo : metodosDirector) {
+          if (metodo.getName().equals(DIRECTOR_METODO_ESQUICIO)) {
+            metodo.invoke(directorFuncion, (Object) esquicioOriginal);
+          }
+        }
+      }
+      catch (Exception e) {
+        println("No se pudo cerrar la función");
+        e.printStackTrace();
+      }
+    }
+    
     void terminar() {
       try {
         Method metodoCierre = claseDirector.getMethod(DIRECTOR_METODO_FINALIZAR);
