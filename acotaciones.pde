@@ -14,6 +14,7 @@
 
 // Carpetas para almacenamiento local
 String CARPETA_ICONOS    = "iconos";
+String CARPETA_IMAGENES  = "imagenes";
 String CARPETA_WEB       = "web";
 String CARPETA_ESQUICIOS = "esquicios";
 String CARPETA_JAVA      = "java";
@@ -21,18 +22,20 @@ String CARPETA_GUIONES   = "guiones";
 
 // Arhivos de imágenes 
 String LOGO_PROCESSING       = "/processing-logo-02.png";
+String IMAGEN_MOSAICO_01     = "/mosaico.jpg";
 String ICONO_EJECUTAR        = "/icono-RUN.png";
 String ICONO_DETENER         = "/icono-STOP.png";
 String ICONO_EJECUTAR_ACTIVO = "/icono-RUN-active.png";
 String ICONO_DETENER_ACTIVO  = "/icono-STOP-active.png";
 
 // Nombres de las clases dinamicas y metodos de su interfaz programatica
-String DIRECTOR_FUNCION_CLASE    = "Director";
-String DIRECTOR_DESQUICIO_CLASE  = "DirectorDesquicio";
-String DIRECTOR_METODO_DIRECCION = "funcion";
-String DIRECTOR_METODO_FINALIZAR = "terminar";
-String DIRECTOR_METODO_ESQUICIO  = "esquicio";
-String DIRECTOR_METODO_VERIFICAR = "concluida";
+String DIRECTOR_FUNCION_CLASE     = "Director";
+String DIRECTOR_DESQUICIO_CLASE   = "DirectorDesquicio";
+String DIRECTOR_METODO_DIRECCION  = "funcion";
+String DIRECTOR_METODO_FINALIZAR  = "terminar";
+String DIRECTOR_METODO_ESQUICIO   = "esquicio";
+String DIRECTOR_METODO_MULTIMEDIA = "multimedia";
+String DIRECTOR_METODO_VERIFICAR  = "concluida";
 
 
 

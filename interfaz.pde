@@ -64,6 +64,7 @@ class Interfaz {
   PImage iconoDetener;
   PImage iconoEjecutarActivo;
   PImage iconoDetenerActivo;
+  PImage[] multimedia;
   
   // Componentes de la interfaz
   PanelTexto    panelIzquierdo;
@@ -154,6 +155,7 @@ class Interfaz {
     iconoDetener        = loadImage(CARPETA_ICONOS + "/" + ICONO_DETENER);
     iconoEjecutarActivo = loadImage(CARPETA_ICONOS + "/" + ICONO_EJECUTAR_ACTIVO);
     iconoDetenerActivo  = loadImage(CARPETA_ICONOS + "/" + ICONO_DETENER_ACTIVO);
+    cargarMultimedia();
     
     // Se definen las fuentes que se utilizaran en la interfaz    
     fuenteTexto          = createFont(FUENTE_TEXTO_REGULAR,   12);
@@ -286,7 +288,7 @@ class Interfaz {
       // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
       libreto.guionarEsquicio(esquicioDeLaEscena,  escenaDelLibreto);        // Se genera clase Java con el guion del "Esquicio"
       funcionOriginal = new Funcion(libreto.directorDesignadoParaEsquicio());
-      funcionOriginal.iniciar(860, 180);
+      funcionOriginal.iniciar(900, 180);
       
       // FUNCION DESQUICIADA
       // Se crear una funcion (PApplet) para representar la escena
@@ -295,7 +297,8 @@ class Interfaz {
       libreto.guionarDesquicio(esquicioDeLaEscena, escenaDelLibreto);       // Se genera clase Java con el guion del "DESQUICIO"
       funcionDesquiciada = new Funcion(libreto.directorDesignadoParaDesquicio());
       funcionDesquiciada.asignarEsquicio(esquicioDeLaEscena);
-      funcionDesquiciada.iniciar(860, 600);
+      funcionDesquiciada.multimedia(multimedia);
+      funcionDesquiciada.iniciar(900, 590);
     }
   }
     
@@ -319,6 +322,16 @@ class Interfaz {
       }
       botonDetener.inactivar();
     }
+  }
+  
+  /**
+   * cargarMultimedia
+   * Esta funcion simplemente se ocupa de cargar en memoria
+   * los contenidos multimedia a utilizar en la funcion
+   */
+  void cargarMultimedia() {
+    this.multimedia = new PImage[1];
+    this.multimedia[0] = loadImage(CARPETA_IMAGENES + "/" + IMAGEN_MOSAICO_01);
   }
 
 

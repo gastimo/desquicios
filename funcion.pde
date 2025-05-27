@@ -70,7 +70,7 @@ class Funcion {
         }
       }
       catch (Exception e) {
-        println("No se pudo cerrar la función");
+        println("No se pudo suministrar el esquicio de la funcion");
         e.printStackTrace();
       }
     }
@@ -97,6 +97,21 @@ class Funcion {
         println("No se pudo cerrar la función");
         e.printStackTrace();
         return false;
+      }
+    }
+    
+    void multimedia(PImage[] contenidos) {
+      try {
+        Method[] metodosDirector = claseDirector.getMethods();
+        for (Method metodo : metodosDirector) {
+          if (metodo.getName().equals(DIRECTOR_METODO_MULTIMEDIA)) {
+            metodo.invoke(directorFuncion, (Object) contenidos);
+          }
+        }
+      }
+      catch (Exception e) {
+        println("No se pudieron suministrar los contenidos multimedia");
+        e.printStackTrace();
       }
     }
 }

@@ -1,4 +1,5 @@
 import processing.core.PApplet;
+import processing.core.PImage;
 import java.awt.Frame;
 import javax.swing.JFrame;
 import processing.awt.PSurfaceAWT;
@@ -51,6 +52,12 @@ public class [[[GUION]]] {
         }
     }
     
+    public void multimedia(PImage[] contenidos) {
+        if (funcionEnCurso != null) {
+            funcionEnCurso.multimedia(contenidos);
+        }   
+    }
+    
     
     // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // 
@@ -65,6 +72,7 @@ public class [[[GUION]]] {
         
         boolean  concluida = false;
         String[] esquicio;
+        PImage[] multimedia;
         
         DESQUICIO() {
         }
@@ -73,6 +81,10 @@ public class [[[GUION]]] {
         
         void esquicio(String[] codigoOriginal) {
             this.esquicio = codigoOriginal;
+        }
+        
+        void multimedia(PImage[] contenidos) {
+            this.multimedia = contenidos;
         }
         
         void cerrar() {
@@ -93,6 +105,17 @@ public class [[[GUION]]] {
             if (key == 'c' || key == 'C') {
                 cerrar();
             }
+        }
+        
+        private void desquicioLine(double x1, double y1, double x2, double y2) {
+            PImage insumo = this.multimedia[0];
+            /*
+            int p1 = map((float) x1, 0, (float) width, 0, (float) insumo.width);
+            int p2 = map((float) y1, 0, (float) height, 0, (float) insumo.height);
+            int p3 = map((float) x2, 0, (float) width, 0, (float) insumo.width);
+            int p4 = map((float) y2, 0, (float) height, 0, (float) insumo.height);
+            */
+            image(insumo, (float)x1, (float)y1, (float)x2, (float)y2);
         }
         
         // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -153,11 +176,16 @@ public class [[[GUION]]] {
         public void stroke(double rgb) {
             super.stroke((int)Math.floor(rgb));
         }
+        public void line(int x1, int y1, int x2, int y2) {
+            desquicioLine((double)x1, (double)x2, (double)y1, (double)y2);
+        }
         public void line(double x1, double y1, double x2, double y2) {
-            super.line((float)x1, (float)y1, (float)x2, (float)y2);
+            //super.line((float)x1, (float)y1, (float)x2, (float)y2);
+            desquicioLine(x1, x2, y1, y2);
         }
         public void ellipse(double a, double b, double c, double d) {
-            super.ellipse((float)a, (float)b, (float)c, (float)d);
+            //super.ellipse((float)a, (float)b, (float)c, (float)d);
+            desquicioLine(a, b, c, d);
         }
         public void arc(double a, double b, double c, double d, double start, double stop) {
             super.arc((float) a, (float) b, (float) c, (float) d, (float) start, (float) stop);
