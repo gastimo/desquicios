@@ -34,7 +34,7 @@ class Funcion {
           // Como la obra depende del guion recibido, esta clase es generada de manera
           // dinámica y recién en este punto es cargada en memoria para empezar la función.
           // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-          Path sourcePath = Paths.get(sketchPath() + "/" + CARPETA_JAVA, director + ".java");
+          Path sourcePath = Paths.get(sketchPath() + "/" + CARPETA_JAVA + "/" + CARPETA_GUIONES, director + ".java");
           jc.run(null, null, null, sourcePath.toFile().getAbsolutePath());
           URL classUrl = sourcePath.getParent().toFile().toURI().toURL();
           URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{classUrl});
@@ -44,7 +44,7 @@ class Funcion {
           // LA FUNCIÓN AGOTADA
           // La función intervenida por el director es instanciada en este punto
           // para ser utilizada al momento de comenzar la representación.
-          // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+          // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
           directorFuncion = claseDirector.getDeclaredConstructor().newInstance();
           Method elMetodo = claseDirector.getMethod(DIRECTOR_METODO_DIRECCION);
           accion = (PApplet) elMetodo.invoke(directorFuncion);
@@ -55,8 +55,8 @@ class Funcion {
       }
     }
     
-    void iniciar() {
-      String[] args = {"--location=100, 100", "Desquicio"};
+    void iniciar(int x, int y) {
+      String[] args = {"--location=" + x + "," + y, "Funcion"};
       PApplet.runSketch(args, accion);
     }
     

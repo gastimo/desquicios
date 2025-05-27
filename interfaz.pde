@@ -111,7 +111,8 @@ class Interfaz {
         String[] esquicio = libreto.guionOriginal(urlEscenaEjemplo);
         panelCentral.contenido(esquicio, 12, 18, fuenteEsquicio);
         panelInferior.actualizarContenido(escenaDelLibreto);
-        libreto.desquiciar(esquicio);
+        libreto.guionarEsquicio(esquicio,  escenaDelLibreto);     // Se genera la clase Java con el guion del esquicio
+        libreto.guionarDesquicio(esquicio, escenaDelLibreto);    // Se genera la clase Java con el guion del desquicio
         urlEscenaEjemplo = null;
     }
     
@@ -258,6 +259,7 @@ class Interfaz {
   /**
    * dirigir
    * Determina si la funcion debe comenzar o detenerse
+   * segun el boton que el usuario haya presionado.
    */
   void dirigir() {
     if (botonIniciar.enFoco() && !inicioDeFuncion) {
@@ -278,8 +280,14 @@ class Interfaz {
       inicioDeFuncion = true;
       botonIniciar.activar();
       botonDetener.inactivar();
+      
+      // Iniciar la funcion para el guion original
       funcionOriginal = new Funcion(libreto.directorDesignadoParaEsquicio());
-      funcionOriginal.iniciar();
+      funcionOriginal.iniciar(860, 180);
+      
+      // Iniciar la funcion para el guion intervenido
+      funcionDesquiciada = new Funcion(libreto.directorDesignadoParaDesquicio());
+      funcionDesquiciada.iniciar(860, 600);
     }
   }
     
@@ -296,6 +304,10 @@ class Interfaz {
       if (funcionOriginal != null) {
         funcionOriginal.terminar();
         funcionOriginal = null;
+      }
+      if (funcionDesquiciada != null) {
+        funcionDesquiciada.terminar();
+        funcionDesquiciada = null;
       }
       botonDetener.inactivar();
     }

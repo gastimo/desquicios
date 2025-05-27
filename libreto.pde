@@ -23,10 +23,9 @@
 class Libreto {
   
   Pagina ejemplosOficiales;
-  String[] guionOriginal;  // Esquicio de Processing
-  String[] guion;
-  String claseDirectorFuncion   = DIRECTOR_FUNCION_CLASE;
-  String claseDirectorDesquicio = DIRECTOR_DESQUICIO_CLASE;
+  String[] guionOriginal;           // Esquicio de Processing
+  String   claseDirectorFuncion   = DIRECTOR_FUNCION_CLASE;
+  String   claseDirectorDesquicio = DIRECTOR_DESQUICIO_CLASE;
 
 
   /**
@@ -92,63 +91,61 @@ class Libreto {
     return guionOriginal;
   }  
   
+  void guionarEsquicio(String[] esquicio, String titulo) {
+    claseDirectorFuncion = DIRECTOR_FUNCION_CLASE + System.currentTimeMillis();
+    String[] codigoClaseJava = convertirEsquicioEnGuion(esquicio, "ESQUICIO: " + titulo, LIBRETO_MODELO_GUION, claseDirectorFuncion);
+    saveStrings(CARPETA_JAVA + "/" + CARPETA_GUIONES + "/" + claseDirectorFuncion + ".java", codigoClaseJava);
+  }
+  
+  void guionarDesquicio(String[] esquicio, String titulo) {
+    claseDirectorDesquicio = DIRECTOR_DESQUICIO_CLASE + System.currentTimeMillis();
+    String[] codigoClaseJava = convertirEsquicioEnGuion(esquicio, "DESQUICIO: " + titulo, LIBRETO_MODELO_DESQUICIO, claseDirectorDesquicio);
+    saveStrings(CARPETA_JAVA + "/" + CARPETA_GUIONES + "/" + claseDirectorDesquicio + ".java", codigoClaseJava);
+  }
+  
   
   /**
-   * desquiciar
-   * Es la operacion de intervenir o subvertir el codigo 
-   * escrito del esquicio original para convertirlo en el
-   * guion de la nueva obra.
+   * convertirEsquicioEnGuion
+   * Esta es la funcion principal del libreto en donde el codigo
+   * del esquicio (sketch) de Processing es interpretado y convertido
+   * en el texto de un guion para una funcion.
+   * Tecnicamente, consiste en generar dinamicamente una clase Java
+   * conteniendo el codigo (intervenido/desquiciado) del esquicio.
    */
-  void desquiciar(String[] esquicio) {
-    claseDirectorFuncion = DIRECTOR_FUNCION_CLASE + System.currentTimeMillis();
-    ArrayList<String> desquicio = new ArrayList<String>();
+  private String[] convertirEsquicioEnGuion(String[] esquicio, String titulo, String guionModelo, String claseDirector) {
+    ArrayList<String> guionConvertido = new ArrayList<String>();
     String dimensionEscena = "size(400, 400);";
     
-    // PRIMER PASO: ELABORACION DEL NUEVO GUION
     // Se lee una clase Java modelo para el guion, dentro de la
     // cual se inserta el esquicio recibido como argumento
-    // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-    guion = loadStrings(CARPETA_JAVA + "/" + LIBRETO_GUION_MODELO);
+    String[] guion = loadStrings(CARPETA_JAVA + "/" + guionModelo);
     for (int i = 0; i < guion.length; i++) {
       
       // Se elabora el nuevo guion a partir del modelo
       if (guion[i].indexOf(LIBRETO_ETIQUETA) < 0) {
-        desquicio.add(corregirGuionOriginal(guion[i]));
+        guionConvertido.add(guion[i].replace("public class [[[GUION]]] {", "public class " + claseDirector + " {"));
       }
       // Se inserta el esquicio original en el guion
       else {
         for (int j = 0; j < esquicio.length; j++) {
           if (esquicio[j].indexOf("size(") < 0) {
-            desquicio.add("\t\t" + corregirEsquicio(esquicio[j]));
+            guionConvertido.add("\t\t" + corregirEsquicio(esquicio[j]));
           }
           else {
             dimensionEscena = esquicio[j]; 
           }
         }
-        desquicio.add("\t");
-        desquicio.add("\t\tpublic void settings() { " + dimensionEscena.trim() + "}");
+        guionConvertido.add("\t");
+        guionConvertido.add("\t\tpublic void settings() { " + dimensionEscena.trim() + "}");
       }
     }
     
+    // Se retorna un array con las lineas del guion convertido
+    String[] arrayDeLineas = new String[guionConvertido.size()];
+    return guionConvertido.toArray(arrayDeLineas);
+  }
+  
     
-    // SEGUNDO PASO: ASIGNACION DEL DIRECTOR AL NUEVO GUION
-    // El guion elaborado (o desquiciado) se guarda fisicamente
-    // en el disco como una Clase Java dinamica que representa al
-    // director que, al ser instanciada, dara inicio a la funcion.
-    // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-    String[] arrayDeLineas = new String[desquicio.size()];
-    saveStrings(CARPETA_JAVA + "/" + claseDirectorFuncion + ".java", desquicio.toArray(arrayDeLineas));
-  }
-  
-  
-  private String corregirGuionOriginal(String linea) {
-    return linea.replace("public class Guion {", "public class " + claseDirectorFuncion + " {");
-  }
-  
-  private String redactarGuionDesquiciado(String linea) {
-    return linea.replace("public class Guion {", "public class " + claseDirectorDesquicio + " {");
-  }
-  
   private String corregirEsquicio(String linea) {
     String nuevaLinea = StringUtils.replaceEach(linea, HTML_REEMPLAZOS, HTML_ENTIDADES);
     return nuevaLinea.replace("void setup() {", "public void setup() {")

@@ -17,14 +17,7 @@ String CARPETA_ICONOS    = "iconos";
 String CARPETA_WEB       = "web";
 String CARPETA_ESQUICIOS = "esquicios";
 String CARPETA_JAVA      = "java";
-
-// Nombres y metodos de las clases dinamicas
-String DIRECTOR_FUNCION_CLASE    = "Director";
-String DIRECTOR_DESQUICIO_CLASE  = "Director";
-String DIRECTOR_METODO_DIRECCION = "funcion";
-String DIRECTOR_METODO_FINALIZAR = "terminar";
-String DIRECTOR_METODO_VERIFICAR = "concluida";
-
+String CARPETA_GUIONES   = "guiones";
 
 // Arhivos de imágenes 
 String LOGO_PROCESSING       = "/processing-logo-02.png";
@@ -32,6 +25,26 @@ String ICONO_EJECUTAR        = "/icono-RUN.png";
 String ICONO_DETENER         = "/icono-STOP.png";
 String ICONO_EJECUTAR_ACTIVO = "/icono-RUN-active.png";
 String ICONO_DETENER_ACTIVO  = "/icono-STOP-active.png";
+
+// Nombres y metodos de las clases dinamicas
+String DIRECTOR_FUNCION_CLASE    = "Director";
+String DIRECTOR_DESQUICIO_CLASE  = "DirectorDesquicio";
+String DIRECTOR_METODO_DIRECCION = "funcion";
+String DIRECTOR_METODO_FINALIZAR = "terminar";
+String DIRECTOR_METODO_VERIFICAR = "concluida";
+
+
+
+// =========================================================
+// 
+//  PARAMETROS DEL LIBRETO Y LA FUNCION
+//
+// =========================================================
+
+String LIBRETO_TITULO           = "LIBRETO - Desquicios";
+String LIBRETO_MODELO_GUION     = "Guion.java";
+String LIBRETO_MODELO_DESQUICIO = "GuionDesquicio.java";
+String LIBRETO_ETIQUETA         = "[[[INSERTAR ESQUICIO ACA]]]";
 
 
 
@@ -106,24 +119,10 @@ String INTERFAZ_TEXTO_PANEL_DER    = "Acotaciones del Desquicio";
 String INTERFAZ_TEXTO_PANEL_CENTRO = "Esquicio de la Escena (Sketch Original)";
 String INTERFAZ_TEXTO_ETIQUETA     = "[[[NOMBRE_EJEMPLO]]]";
 String INTERFAZ_TEXTO_CONSOLA_01   = "> FUNCIONES AGOTADAS!!!";
-String INTERFAZ_TEXTO_CONSOLA_02   = "> Escena: \"" + INTERFAZ_TEXTO_ETIQUETA + "\" > Presione \"I\" para iniciar la funcion o \"C\" para concluirla";
+String INTERFAZ_TEXTO_CONSOLA_02   = "> Escena: \"" + INTERFAZ_TEXTO_ETIQUETA + "\" - Presione \"I\" para iniciar la funcion o \"C\" para concluirla";
 String INTERFAZ_TEXTO_MENU         = "File      Edit      Sketch      Debug      Tools      Help";
 String[] INTERFAZ_TEXTO_CONSOLA    = new String[]{INTERFAZ_TEXTO_CONSOLA_01, INTERFAZ_TEXTO_CONSOLA_02};
 
-
-
-// =========================================================
-// 
-//  PARAMETROS DEL LIBRETO Y LA FUNCION
-//
-// =========================================================
-
-String LIBRETO_TITULO       = "LIBRETO - Desquicios";
-String LIBRETO_GUION_MODELO = "Guion.java";
-String LIBRETO_ETIQUETA     = "[[[INSERTAR ESQUICIO ACA]]]";
-
-int    FUNCION_ANCHO   = 400;
-int    FUNCION_ALTO    = 400;
 
 
 
