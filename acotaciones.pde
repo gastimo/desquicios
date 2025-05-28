@@ -53,13 +53,13 @@ String[] IMAGENES_ARCHIVO = new String[] {
           "/10006070_773720392744042_3613032384325024813_o.jpg",
           "/10096009.jpg",
           "/10257215_717855364997212_7616857532227772328_o.jpg",
-          "/a.png",
+          "/collage.jpg",
           "/Interstellar 42 - Progress - cover.jpg",
           "/Minecraft_Second_Pixel_Art.jpg",
           "/cover.jpeg",
-          "/space ambient copia.jpg",
+          "/space ambient.jpg",
           "/ww2_stamp.jpg",
-          "/map.png",
+          "/map.jpg",
           "/MOSHED-2020-4-6-19-40-49.jpg"};
 
 
