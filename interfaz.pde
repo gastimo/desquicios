@@ -44,27 +44,29 @@ class Interfaz {
   Libreto  libreto;
   String   escenaDelLibreto = null;  // Nombre del ejemplo de Processing seleccionado
   String[] esquicioDeLaEscena;       // Codigo del sketch del ejemplo de Processing
+  String[] acotacionesDelGuion;      // Acotaciones al director sobre el codigo subvertido
 
   // Variables para gestionar los links a Processing
   String urlEjemplosProcessing = URL_PAGINA_EJEMPLOS;
   String urlEscenaEjemplo = null;
   
   // Fuentes tipograficas
-  PFont  fuenteTexto;
-  PFont  fuenteTextoResaltado;
-  PFont  fuenteTextoCintillo;
-  PFont  fuenteEsquicio;
-  PFont  fuenteDesquicio;
-  PFont  fuenteMenu;
-  PFont  fuenteConsola;
-  
+  PFont   fuenteTexto;
+  PFont   fuenteTextoResaltado;
+  PFont   fuenteTextoCintillo;
+  PFont   fuenteEsquicio;
+  PFont   fuenteDesquicio;
+  PFont   fuenteMenu;
+  PFont   fuenteConsola;
+  PFont[] fuentesDesquicio;
+
   // Imagenes e iconos
   PImage logoProcessing;
   PImage iconoEjecutar;
   PImage iconoDetener;
   PImage iconoEjecutarActivo;
   PImage iconoDetenerActivo;
-  PImage[] multimedia;
+  PImage[] imagenesDesquicio = new PImage[0];
   
   // Componentes de la interfaz
   PanelTexto    panelIzquierdo;
@@ -94,7 +96,7 @@ class Interfaz {
   
   
   /**
-   * desplegar
+   * desplegar (draw)
    * Funcion principal que se ocupa de dibujar cada elemento
    * de la interfaz (IDE) en cada iteracion de la funcion
    * "draw" de Processing.
@@ -110,9 +112,18 @@ class Interfaz {
     // Se verifica si es necesario cargar el guion original
     // del esquicio de Processing en el panel central.
     if (urlEscenaEjemplo != null) {
+        // Se recupera el "esquicio" del libreto y se lo carga en el panel central
         esquicioDeLaEscena = libreto.guionOriginal(urlEscenaEjemplo);
-        panelCentral.contenido(esquicioDeLaEscena, 12, 18, fuenteEsquicio);
-        panelInferior.actualizarContenido(escenaDelLibreto);  // Actualizar el texto que aparece en la consola
+        panelCentral.contenido(esquicioDeLaEscena, 12, INTERFAZ_MARGEN_SUPERIOR_PANEL, fuenteEsquicio);
+        
+        // Se recuperan las acotaciones con los "desquicios" y se las carga en el panel derecho
+        acotacionesDelGuion = libreto.agregarAcotacionesAlGuion(esquicioDeLaEscena);
+        panelDerecho.contenido(acotacionesDelGuion, 6, INTERFAZ_MARGEN_SUPERIOR_PANEL, fuenteDesquicio);
+        
+        // Por ultimo, se actualizan los contenidos en la consola
+        panelInferior.actualizarContenido(escenaDelLibreto); 
+        
+        // Una vez cargado el esquicios y sus desquicios, se blanquea la url del ejemplo
         urlEscenaEjemplo = null;
     }
     
@@ -124,7 +135,12 @@ class Interfaz {
       }
     }
     
-    // Se dibujan todos los paneles de la interfaz
+    // 
+    // DIBUJOS DE LOS COMPONENTES DE LA INTERFAZ
+    // A partir de aca comienza el dibujo de cada uno
+    // de los elementos de la interfaz: paneles, consola
+    // botones, menu, scrollbar, etc.
+    // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     panelSuperior.dibujar();
     panelIzquierdo.dibujar();
     panelCentral.dibujar();
@@ -139,7 +155,7 @@ class Interfaz {
   
   
   /**
-   * preparar
+   * preparar (setup)
    * Esta funcion carga en memoria todos los recursos necesarios para
    * construir la interfaz de usuario e inicializa los componentes
    * que sean necesarios.
@@ -163,7 +179,7 @@ class Interfaz {
     fuenteMenu           = createFont(FUENTE_TEXTO_MENU,      13);
     fuenteTextoCintillo  = createFont(FUENTE_TEXTO_SOLAPA,    12);
     fuenteEsquicio       = createFont(FUENTE_TEXTO_ESQUICIO,  14);
-    fuenteDesquicio      = createFont(FUENTE_TEXTO_DESQUICIO, 13);
+    fuenteDesquicio      = createFont(FUENTE_TEXTO_ACOTACION, 12);
     fuenteConsola        = createFont(FUENTE_TEXTO_CONSOLA,   14);
     
     //
@@ -286,9 +302,9 @@ class Interfaz {
       // Se crear una funcion (PApplet) para representar la escena
       // correspondiente al codigo original del ejemplo (el esquicio).
       // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-      libreto.guionarEsquicio(esquicioDeLaEscena,  escenaDelLibreto);        // Se genera clase Java con el guion del "Esquicio"
+      libreto.guionarEsquicio(esquicioDeLaEscena, escenaDelLibreto);         // Se genera clase Java con el guion del "Esquicio"
       funcionOriginal = new Funcion(libreto.directorDesignadoParaEsquicio());
-      funcionOriginal.iniciar(900, 180);
+      funcionOriginal.iniciar(1000, 180);
       
       // FUNCION DESQUICIADA
       // Se crear una funcion (PApplet) para representar la escena
@@ -297,8 +313,8 @@ class Interfaz {
       libreto.guionarDesquicio(esquicioDeLaEscena, escenaDelLibreto);       // Se genera clase Java con el guion del "DESQUICIO"
       funcionDesquiciada = new Funcion(libreto.directorDesignadoParaDesquicio());
       funcionDesquiciada.asignarEsquicio(esquicioDeLaEscena);
-      funcionDesquiciada.multimedia(multimedia);
-      funcionDesquiciada.iniciar(900, 590);
+      funcionDesquiciada.multimedia(imagenesDesquicio, fuentesDesquicio);
+      funcionDesquiciada.iniciar(1000, 590);
     }
   }
     
@@ -326,12 +342,21 @@ class Interfaz {
   
   /**
    * cargarMultimedia
-   * Esta funcion simplemente se ocupa de cargar en memoria
-   * los contenidos multimedia a utilizar en la funcion
+   * Esta funcion se ocupa de cargar en memoria los contenidos
+   * multimedia a utilizar en la funcion desquiciada.
    */
   void cargarMultimedia() {
-    this.multimedia = new PImage[1];
-    this.multimedia[0] = loadImage(CARPETA_IMAGENES + "/" + IMAGEN_MOSAICO_01);
+    // Se cargan las imagenes de archivo
+    if (this.imagenesDesquicio.length == 0) {
+      this.imagenesDesquicio = new PImage[IMAGENES_ARCHIVO.length];
+      for (int i = 0; i < IMAGENES_ARCHIVO.length; i++) {
+        this.imagenesDesquicio[i] = loadImage(CARPETA_IMAGENES + "/" + IMAGENES_ARCHIVO[i]);
+      }
+    }
+    
+    // Se cargan las fuentes a utilizar en la funcion
+    this.fuentesDesquicio = new PFont[1];
+    this.fuentesDesquicio[0] = createFont(FUENTE_TEXTO_DESQUICIO, 18);
   }
 
 

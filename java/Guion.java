@@ -64,7 +64,14 @@ public class [[[GUION]]] {
 
         [[[INSERTAR ESQUICIO ACA]]]
         
-        
+
+        // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        // 
+        // INTERFAZ PROGRAMATICA DE LA FUNCION (APIs)
+        // Funciones para interactuar con la funcion en 
+        // "runtime" desde la ventana del IDE.
+        //
+        // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
         void cerrar() {
             if (!this.concluida) {
                 System.out.println("El director da por concluida la funcion original");
@@ -86,7 +93,7 @@ public class [[[GUION]]] {
         }
         
         // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        // 
+        // HACK #1
         // REDEFINICION DE FUNCIONES "FINALES" (CONSTANTES)
         // Como las funciones estándares de la clase PApplet 
         // que están marcadas como "final" no pueden ser 
@@ -111,7 +118,7 @@ public class [[[GUION]]] {
         
         
         // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        // 
+        // HACK #2
         // REDEFINICION DE FUNCIONES CON PARAMETROS "FLOAT"
         // Redefinición de las funciones estándares de la clase
         // PApplet para corregir temas de precición cuando 

@@ -100,12 +100,12 @@ class Funcion {
       }
     }
     
-    void multimedia(PImage[] contenidos) {
+    void multimedia(PImage[] contenidos, PFont[] fuentes) {
       try {
         Method[] metodosDirector = claseDirector.getMethods();
         for (Method metodo : metodosDirector) {
           if (metodo.getName().equals(DIRECTOR_METODO_MULTIMEDIA)) {
-            metodo.invoke(directorFuncion, (Object) contenidos);
+            metodo.invoke(directorFuncion, (Object) contenidos, (Object) fuentes);
           }
         }
       }

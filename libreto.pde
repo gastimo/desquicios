@@ -22,8 +22,7 @@
 
 class Libreto {
   
-  Pagina ejemplosOficiales;
-  String[] guionOriginal;           // Esquicio de Processing
+  Pagina ejemplosOficiales;         // Pagina con el contenido del sitio oficial de Processing ("Ejemplos")
   String   claseDirectorFuncion   = DIRECTOR_FUNCION_CLASE;
   String   claseDirectorDesquicio = DIRECTOR_DESQUICIO_CLASE;
 
@@ -81,28 +80,72 @@ class Libreto {
   
   /**
    * guionOriginal
+   * El guion original es el esquicio o "sketch" del ejemplo de Processing.
    * Dado el link a una de las paginas de ejemplos de Processing
    * se descarga el contenido HTML y se extrae el codigo del 
    * esquicio (sketch) original del ejemplo
    */
   String[] guionOriginal(String urlPaginaEjemplo) {
     Pagina ejemplo = new Pagina(web, urlPaginaEjemplo);
-    guionOriginal = ejemplo.obtenerEsquicio();
-    return guionOriginal;
+    return ejemplo.obtenerEsquicio();
   }  
   
+  /**
+   * guionarEsquicio
+   * A partir del esquicio recibido como argumento, se devuelve el guion
+   * que no es otra cosa mas que el codigo de la clase Java a generar
+   * (el "Director") que llevara adelante la "Funcion Agotada"
+   */
   void guionarEsquicio(String[] esquicio, String titulo) {
     claseDirectorFuncion = DIRECTOR_FUNCION_CLASE + System.currentTimeMillis();
-    String[] codigoClaseJava = convertirEsquicioEnGuion(esquicio, "ESQUICIO: " + titulo, LIBRETO_MODELO_GUION, claseDirectorFuncion);
+    String[] codigoClaseJava = convertirEsquicioEnGuion(esquicio, titulo, LIBRETO_MODELO_GUION, claseDirectorFuncion);
     saveStrings(CARPETA_JAVA + "/" + CARPETA_GUIONES + "/" + claseDirectorFuncion + ".java", codigoClaseJava);
   }
   
+  
+  /**
+   * guionarDesquicio
+   * A partir del esquicio recibido como argumento, se devuelve el guion
+   * subvertido, que no es otra cosa mas que el codigo de la clase Java a
+   * generar (el "DirectorDesquiciado") que llevara adelante la "Funcion Desquiciada".
+   */
   void guionarDesquicio(String[] esquicio, String titulo) {
     claseDirectorDesquicio = DIRECTOR_DESQUICIO_CLASE + System.currentTimeMillis();
-    String[] codigoClaseJava = convertirEsquicioEnGuion(esquicio, "DESQUICIO: " + titulo, LIBRETO_MODELO_DESQUICIO, claseDirectorDesquicio);
+    String[] codigoClaseJava = convertirEsquicioEnGuion(esquicio, titulo, LIBRETO_MODELO_DESQUICIO, claseDirectorDesquicio);
+    boolean enBucle = true;
+    for (int i = 0; i < codigoClaseJava.length; i++) {
+      codigoClaseJava[i] = codigoClaseJava[i].replace("void draw() {}", "void draw() { background(-1);}");
+      if (codigoClaseJava[i].indexOf("noLoop()") >= 0) {
+        codigoClaseJava[i] = codigoClaseJava[i].replace("noLoop()", "//noLoop()");
+        enBucle = false;
+      }
+    }
+    if (!enBucle) {
+      for (int i = 0; i < codigoClaseJava.length; i++) {
+        codigoClaseJava[i] = codigoClaseJava[i].replace("public void draw() {", "public void draw() {\n\t\t\tbackground(0);\n\t\t\tsuper.frameRate(12);\n\t\t\tthis.velocidad = 1;\n");
+      }
+    }
     saveStrings(CARPETA_JAVA + "/" + CARPETA_GUIONES + "/" + claseDirectorDesquicio + ".java", codigoClaseJava);
   }
   
+  /**
+   * agregarAcotacionesAlGuion
+   * Esta funcion recibe el guion original que se obtuvo previamente
+   * 
+   */
+  String[] agregarAcotacionesAlGuion(String[] guion) {
+    String[] acotaciones = new String[guion.length];
+    for (int i = 0; i < guion.length; i++) {
+      String lineaAcotacion = "";
+      for (int j = 0; j < ACOTACIONES.length; j++) {
+        if (guion[i].indexOf(ACOTACIONES[j][0]) >= 0) {
+          lineaAcotacion += ACOTACIONES[j][1];
+        }
+      }
+      acotaciones[i] = lineaAcotacion;
+    }
+    return acotaciones;
+  }
   
   /**
    * convertirEsquicioEnGuion
@@ -123,7 +166,13 @@ class Libreto {
       
       // Se elabora el nuevo guion a partir del modelo
       if (guion[i].indexOf(LIBRETO_ETIQUETA) < 0) {
-        guionConvertido.add(guion[i].replace("public class [[[GUION]]] {", "public class " + claseDirector + " {"));
+        if (guion[i].indexOf(CODIGO_DECLARACION_CLASE) >= 0) {
+          guionConvertido.add("/**\n * " + titulo + "\n * Guion producido para el ejemplo de Processing.\n */");
+          guionConvertido.add(guion[i].replace(CODIGO_DECLARACION_CLASE, "public class " + claseDirector + " {"));
+        }
+        else {
+          guionConvertido.add(guion[i]);
+        }
       }
       // Se inserta el esquicio original en el guion
       else {
